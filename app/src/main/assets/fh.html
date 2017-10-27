@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="./echarts/esl.js"></script>
+</head>
+<body>
+<nav id="navbar">
+    <h1 class="title">负荷数据</h1>
+    <!--<span class="location">苏州</span>-->
+    <a class="back" id="back">返回</a>
+</nav>
+
+<main id="main">
+    <div style="height:40px;line-height:40px;padding : 10px">
+        <span>日期:</span>
+        <input type="date" id='date'>
+    </div>
+
+    <section class="section section-chart">
+        <div class="section-hd">
+            <h2 class="section-title">数据图表</h2>
+            <table>
+                <tr>
+                    <td id='chartTD' style="width:100%;">
+                        <div id="lineChart" style="height:200px;width:100%;"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <div class="controller">
+        <div class="normal-btns">
+            <button type="button" id="search">查询</button>
+        </div>
+    </div>
+</main>
+<script>
+      var date=new Date();
+      var year=date.getFullYear(); //获取当前年份
+      var mon=date.getMonth()+1; //获取当前月份
+      mon=mon>9?mon:'0'+mon;
+      var da=date.getDate(); //获取当前日
+      da=da>9?da:'0'+da;
+      var mytime=year+"-"+mon+"-"+da;
+      $("#date").val(mytime);
+
+     $('#back').click(function(){
+		window.fh.back();
+	 });
+
+
+    showBar($("#date").val());
+
+    function showBar(date){
+       var  myChart=null;
+      require.config({
+        paths: {
+            echarts:'./echarts/echarts',
+            'echarts/chart/bar':'./echarts/chart/bar',
+            'echarts/chart/line':'./echarts/chart/line'
+        }
+      });
+		var dataStr=  window.fh.getLoad($("#date").val());
+		var json= $.parseJSON(dataStr);
+		var labels=json.label;
+		var datas=json.data;
+
+     require(['echarts','echarts/chart/bar','echarts/chart/line'],function(ec) {
+            myChart=ec.init(document.getElementById('lineChart'));
+
+            option = {
+                calculable : false,
+                title:{
+                    text:'负荷(W)',
+                    x: 'center',
+                    y: 'top'
+                },
+                grid:{x:55,y:30,x2:20,y2:20},
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : labels
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'',
+                        type:'line',
+                        data:datas
+                    }
+                ]
+            };
+            myChart.setOption(option);
+        });
+    }
+
+    $('#search').click(function(){
+        var date= $("#date").val();
+        showBar(date);
+    });
+
+
+</script>
+</body>
+</html>

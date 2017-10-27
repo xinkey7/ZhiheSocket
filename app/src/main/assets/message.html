@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<link rel="stylesheet" href="css/style.css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+<nav id="navbar">
+	<h1 class="title">消息</h1>
+	<!--<span class="location">苏州</span>-->
+</nav>
+
+<main id="main">
+	<ul class="message-list">
+		<li>
+			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="body">
+				<h5 class="name">无锡智合</h5>
+				<span class="date">14:29</span>
+				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+			</div>
+		</li>
+		<li>
+			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="body">
+				<h5 class="name">无锡智合</h5>
+				<span class="date">14:29</span>
+				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+			</div>
+		</li>
+		<li>
+			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="body">
+				<h5 class="name">无锡智合</h5>
+				<span class="date">14:29</span>
+				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+			</div>
+		</li>
+	</ul>
+</main>
+</body>
+<script type="text/javascript">
+	loadMessage();
+	function loadMessage(){
+		$(".message-list").append(window.message.loadMessage());
+	}
+</script>
+</html>

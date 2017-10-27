@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="wrapper" style="top:-120px;background:#fff;height:120px;width:100%;z-index:999;position:absolute;filter:alpha(opacity=80);-moz-opacity:0.8;opacity:0.8;padding:0 auto">
+	<div class="scroll">
+		<div style="height:40px;line-height:40px;border-bottom:1px solid #ccc;" id="close"><center><img src="img/close.png"></center></div>
+		<div style="height:40px;line-height:40px;font-size:25px;color:#000;font-weight:normal;border-bottom:1px solid #ccc" id="dl"><center>电量</center></div>
+		<div style="height:40px;line-height:40px;font-size:25px;color:#000;font-weight:normal" id="fh"><center>负荷</center></div>
+	</div>
+</div>
+<nav id="navbar">
+	<h1 class="title">风扇</h1>
+	<a class="back">返回</a>
+	<div class="increase2">详细</div>
+</nav>
+
+<main id="main">
+	<section class="section section-top section-devicestatus">
+		<!-- <span class="icon icon-snow"></span>
+		<span class="icon icon-wind"></span>
+		<strong class="temp">27°</strong> -->
+		<span class="status">ON</span>
+		<!-- <span class="icon icon-breeze"></span> -->
+	</section>
+
+	<div class="controller">
+		<div class="round-btns">
+			<!-- <button type="button" class="increase"><span class="icon"></span></button> -->
+			<button type="button" class="power"><span class="icon"></span></button>
+			<!-- <button type="button" class="decrease"><span class="icon"></span></button>-->
+		</div>
+
+		<!-- <div class="normal-btns">
+			<button type="button" class="mode">模式</button>
+			<button type="button">摆风</button>
+			<button type="button">风速</button>
+		</div> -->
+	</div>
+</main>
+</body>
+<script type="text/javascript">
+    var actemp = 0;
+	var status = 0;
+	var mode = 0;
+	queryDeviceState();
+
+	$('button[class=power]').click(function(){
+		var powerstr = window.control.power(parseInt(status));
+		var powerJson = $.parseJSON(powerstr);
+		<!--if(powerJson.result == true){-->
+			if(status == 1){
+				status = 0;
+				$('span[class=status]').text("关");
+			}else if(status == 0){
+				status = 1;
+				$('span[class=status]').text("开");
+			}
+		<!--}else{-->
+			<!--alert(powerJson.message);-->
+		<!--}-->
+	});
+
+	function queryDeviceState(){
+		var str = window.control.init();
+		var data = $.parseJSON(str);
+		$('span[class=status]').text(data.state.is_on==1?"开":"关");
+		status=data.state.is_on==1?1:0;
+	}
+
+
+	$('a[class=back]').click(function(){
+		 window.control.back();
+	});
+
+    $('.increase2').click(function(){
+         $("#wrapper").css('top','0px');
+	});
+
+	$('#close').click(function(){
+         $("#wrapper").css('top','-120px');
+	});
+
+	$('#dl').click(function(){
+	    $("#wrapper").css('top','-120px');
+        window.control.dl();
+	});
+
+	$('#fh').click(function(){
+	    $("#wrapper").css('top','-120px');
+        window.control.fh();
+	});
+
+</script>
+</html>

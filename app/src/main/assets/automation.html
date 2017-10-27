@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<style>
+    body {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    }
+
+
+    /* main menu styles */
+    #nav,#nav ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+    }
+    #nav {
+    height:41px;
+    //padding-left:5px;
+    padding-top:5px;
+    position:relative;
+    z-index:2;
+    }
+    #nav ul {
+    left:-9999px;
+    position:absolute;
+    top:37px;
+    width:100%;
+    }
+    #nav ul ul {
+    left:-9999px;
+    position:absolute;
+    top:0;
+    width:100%;
+    }
+    #nav li {
+    float:left;
+    margin-right:5px;
+    background-color:#eff3f5;
+    position:relative;
+    width:100%;
+    border-bottom:solid 1px #cccccc;
+    z-index:3;
+    }
+    #nav li a {
+    color:#000;
+    display:block;
+    float:left;
+    font-size:16px;
+    padding:8px 10px;
+    text-decoration:none;
+    }
+    #nav > li > a {
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    -o-border-radius:6px;
+    border-radius:6px;
+
+    overflow:hidden;
+    }
+    #nav li a.fly {
+    background: url(img/1.png) no-repeat right center;
+    padding-right:15px;
+    }
+    #nav li a.add {
+    background: url(img/2.png) no-repeat left center;
+    padding-left:15px;
+    float:right;
+    }
+    #nav ul li {
+    margin:0;
+    width:100%;
+    }
+    #nav ul li a {
+    width:120px;
+    }
+    #nav ul li a.fly {
+    padding-right:10px;
+    }
+
+    #nav li a.clock {
+    margin-left:10px;
+    background: url(img/3.png) no-repeat left center;
+    padding-left:80px;
+    }
+
+    #nav li a.kt {
+    margin-left:10px;
+    background: url(img/5.png) no-repeat left center;
+    padding-left:80px;
+    }
+
+    #nav li a.tyy {
+    margin-left:10px;
+    background: url(img/4.png) no-repeat left center;
+    padding-left:80px;
+    }
+
+    #nav li a.light {
+    margin-left:10px;
+    background: url(img/6.png) no-repeat left center;
+    padding-left:80px;
+    }
+
+    #nav .sel:hover > a {
+    font-weight:bold;
+    color:#22a34d;
+    }
+
+    /*focus styles*/
+    #nav li a:focus {
+    outline-width:0;
+    }
+
+    /*popups*/
+    #condition:active + ul.dd,#condition:focus + ul.dd,#nav li ul.dd:hover {
+    left:0;
+    }
+    #nav ul.dd li a:active + ul,#nav ul.dd li a:focus + ul,#nav ul.dd li ul:hover {
+    left:140px;
+    }
+
+
+    .mui-switch {
+    width: 52px;
+    height: 31px;
+    position: relative;
+    border: 1px solid #dfdfdf;
+    background-color: #fdfdfd;
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-clip: content-box;
+    display: inline-block;
+    -webkit-appearance: none;
+    user-select: none;
+    outline: none; }
+    .mui-switch:before {
+    content: '';
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    border-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
+    .mui-switch:checked {
+    border-color: #64bd63;
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63; }
+    .mui-switch:checked:before {
+    left: 21px; }
+    .mui-switch.mui-switch-animbg {
+    transition: background-color ease 0.4s; }
+    .mui-switch.mui-switch-animbg:before {
+    transition: left 0.3s; }
+    .mui-switch.mui-switch-animbg:checked {
+    box-shadow: #dfdfdf 0 0 0 0 inset;
+    background-color: #64bd63;
+    transition: border-color 0.4s, background-color ease 0.4s; }
+    .mui-switch.mui-switch-animbg:checked:before {
+    transition: left 0.3s; }
+    .mui-switch.mui-switch-anim {
+    transition: border cubic-bezier(0, 0, 0, 1) 0.4s, box-shadow cubic-bezier(0, 0, 0, 1) 0.4s; }
+    .mui-switch.mui-switch-anim:before {
+    transition: left 0.3s; }
+    .mui-switch.mui-switch-anim:checked {
+    box-shadow: #64bd63 0 0 0 16px inset;
+    background-color: #64bd63;
+    transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s; }
+    .mui-switch.mui-switch-anim:checked:before {
+    transition: left 0.3s; }
+</style>
+<script>
+       <!--var str = window.automation.automation();-->
+	   <!--var json = $.parseJSON(str);-->
+	   <!--var action=json.action;-->
+	   <!--for(var b=0;i<action.length;b++){-->
+	        <!--var action_type=action[b].action_type;-->
+
+	        <!--if(action_type=='1'){-->
+
+	        <!--}else if(action_type=='2'){-->
+
+	        <!--}-->
+	   <!--}-->
+
+</script>
+<body>
+<nav id="navbar">
+    <h1 class="title">自动化</h1>
+    <div class="increase2">&nbsp;</div>
+</nav>
+
+<main id="main">
+    <div class="example">
+        <ul id="nav">
+            <li>
+                <a class="add" href="#">&nbsp;</a>
+                <a id="condition" class="fly" href="#" tabindex="1">满足所有条件时</a>
+                <ul class="dd">
+                    <li class="sel"><a href="#">满足所有条件时</a></li>
+                    <li class="sel"><a href="#">满足任一条件时</a></li>
+                    <!--<li id="aa" style="filter:alpha(opacity=50);  -moz-opacity:0.5;  -khtml-opacity: 0.5; opacity: 0.5; background-color:#ccc;width:100%"><a href="#">&nbsp;</a></li>-->
+                </ul>
+            </li>
+        </ul>
+        <ul id='nav' style="z-index:-1;">
+            <li>
+                <a href="#">有人进入会议室</a>
+            </li>
+        </ul>
+
+        <ul id='nav' style="z-index:-1;">
+            <li>
+                <a class="add" href="#">&nbsp;</a>
+                <a href="#" tabindex="1"><strong>将执行以下结果</strong></a>
+            </li>
+        </ul>
+
+        <ul id='nav' class="actions" style="z-index:-1;line-height:60px">
+            <li>
+                <a href="#" class='light'>电灯开启</a>
+            </li>
+            <li>
+                <a href="#" class='clock'>延时3秒</a>
+            </li>
+            <li>
+                <a href="#" class='tyy'>投影仪开启</a>
+            </li>
+            <li>
+                <a href="#" class='clock'>延时3秒</a>
+            </li>
+            <li>
+                <a href="#" class='kt'>空调开启</a>
+            </li>
+        </ul>
+    </div>
+    <div style="position:absolute;bottom:0;width:100%;border-top:1px solid #ccc;">
+        <table>
+            <tr height="50px">
+                <td align="left" style="width:50%;"><strong>&nbsp;开启自动化</strong></td>
+                <td align="right" style="width:50%;"><label style="margin-right:10px"><input
+                        class="mui-switch mui-switch-anim" type="checkbox" checked></label></td>
+            </tr>
+        </table>
+    </div>
+</main>
+
+
+</body>
+
+</html>

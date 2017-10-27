@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="./echarts/esl.js"></script>
+</head>
+<body>
+<nav id="navbar">
+    <h1 class="title">电量数据</h1>
+    <!--<span class="location">苏州</span>-->
+    <a class="back" id="back">返回</a>
+</nav>
+
+<main id="main">
+    <div style="height:40px;line-height:40px;padding : 10px">
+        <span>日期:</span>
+        <input type="date" id='date'>
+    </div>
+
+    <section class="section section-chart">
+        <div class="section-hd">
+            <h2 class="section-title">数据图表</h2>
+            <table>
+                <tr>
+                    <td id='chartTD' style="width:100%;">
+                        <div id="barChart" style="height:200px;width:100%;"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+    <div class="controller">
+        <div class="normal-btns">
+            <button type="button" id="search">查询</button>
+        </div>
+    </div>
+</main>
+<script>
+      var date=new Date();
+      var year=date.getFullYear(); //获取当前年份
+      var mon=date.getMonth()+1; //获取当前月份
+      mon=mon>9?mon:'0'+mon;
+      var da=date.getDate(); //获取当前日
+      da=da>9?da:'0'+da;
+      var mytime=year+"-"+mon+"-"+da;
+      $("#date").val(mytime);
+
+     $('#back').click(function(){
+		window.dl.back();
+	 });
+
+    showBar($("#date").val());
+
+    function showBar(date){
+        var  myChart=null;
+      require.config({
+        paths: {
+            echarts:'./echarts/echarts',
+            'echarts/chart/bar':'./echarts/chart/bar',
+            'echarts/chart/line':'./echarts/chart/line'
+        }
+      });
+		var dataStr=  window.dl.getElectricity($("#date").val());
+		var jsonBar= $.parseJSON(dataStr);
+		var barlabels=jsonBar.label;
+		var bardatas=jsonBar.data;
+     require(['echarts','echarts/chart/bar','echarts/chart/line'],function(ec) {
+            myChart=ec.init(document.getElementById('barChart'));
+
+            option = {
+               title:{
+                text:'用电量(kWh)',
+                x: 'center',
+                y: 'top'
+            },
+            grid: {
+                x: 50,
+                y: 45,
+                x2:'2%',
+                y2:40
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data :barlabels,
+                    "axisLabel":{
+                        interval: 3
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    show: true,
+                    axisLabel : {
+                            formatter: '{value}'
+                    }
+                }
+            ],
+            series : [
+                {
+                    name:'直接访问',
+                    type:'bar',
+                    itemStyle : { normal: {label : {show: false, position:'top'}}},
+                    data:bardatas
+                }
+            ]
+            };
+            myChart.setOption(option);
+        });
+    }
+
+
+    $('#search').click(function(){
+        var date= $("#date").val();
+        showBar(date);
+    });
+
+
+</script>
+</body>
+</html>

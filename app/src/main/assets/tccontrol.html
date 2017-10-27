@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav id="navbar">
+    <h1 class="title">透传装置</h1>
+    <a class="back">返回</a>
+    <a class="refresh">刷新</a>
+</nav>
+
+<main id="main">
+    <section class="section section-top section-devicestatus">
+        <!-- <span class="icon icon-snow"></span>
+        <span class="icon icon-wind"></span>
+        <strong class="temp">27°</strong> -->
+        <div class="bian"></div>
+        <span class="dian">电量:<span style="color:blue;" class="val1">10</span>kWh</span>
+        <span class="fuhe">负荷:<span style="color:blue;" class="val2">3400</span>W</span>
+
+        <span class="status">开</span>
+        <!-- <span class="icon icon-breeze"></span> -->
+    </section>
+
+    <div class="controller">
+        <div class="round-btns">
+            <button type="button" class="power"><span class="icon"></span></button>
+        </div>
+    </div>
+</main>
+</body>
+<script type="text/javascript">
+	var status = 0;
+	queryDeviceState();
+	$('button[class=power]').click(function(){
+		var powerstr = window.control.onOff(parseInt(status));
+		var powerJson = $.parseJSON(powerstr);
+		if(powerJson.result == true){
+			if(status == 1){
+				status = 0;
+				$('span[class=status]').text("关");
+			}else if(status == 0){
+				status = 1;
+				$('span[class=status]').text("开");
+			}
+		}else{
+			alert(powerJson.message);
+		}
+	});
+	refreshData();
+    var t=setInterval("refreshData()",5000);
+    $('a[class=refresh]').click(function(){
+        clearInterval(t);
+        t=setInterval("refreshData()",5000);
+	});
+
+	function queryDeviceState(){
+		var str = window.control.init();
+		var data = $.parseJSON(str);
+		status = data.state.on;
+		$('span[class=status]').text(data.state.on==1?"开":"关");
+	}
+
+    function refreshData(){
+         var str=window.control.refreshData();
+         var data = $.parseJSON(str);
+         $('span[class=val1]').text(data.dl);
+         $('span[class=val2]').text(data.fh);
+    }
+
+</script>
+</html>

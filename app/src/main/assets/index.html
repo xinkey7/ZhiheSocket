@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="./echarts/esl.js"></script>
+</head>
+<body>
+<nav id="navbar">
+    <h1 class="title">首页</h1>
+    <!--<span class="location">苏州</span>-->
+</nav>
+
+<main id="main">
+    <section class="section section-top section-income">
+        <div class="yesterday">
+            <span>今日收益（元）</span>
+            <strong id="profit_today">¥5.34</strong>
+        </div>
+
+        <div class="total">
+            <span>总收益（元）</span>
+            <strong id="profit_total">¥56.78</strong>
+        </div>
+    </section>
+
+    <section class="section section-devices">
+        <div class="section-bd">
+            <table class="device-table">
+                <thead>
+                <th class="col-device">设备列表</th>
+                <th>设备</th>
+                <th>状态</th>
+                <th class="col-power">功率（W）</th>
+                </thead>
+                <tbody id="tlist">
+                <!-- <tr id="kongtiao">
+                    <td class="col-device"><span class="icon airconditioner"></span></td>
+                    <td><span class="indicator on"></span></td>
+                    <td class="col-power">1100</td>
+                </tr> -->
+                <!-- <tr id="fengshan">
+                    <td class="col-device"><span class="icon electricfan"></span></td>
+                    <td><span class="indicator off"></span></td>
+                    <td class="col-power">1100</td>
+                </tr> -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <form class="loginform">
+    <section class="section-addDevice">
+        <div>
+            <button type="button" id="add">增加新设备</button>
+        </div>
+    </section>
+    </form>
+</main>
+<script>
+      <!--var show="line";-->
+      <!--var  myChart=null;-->
+      <!--var  myChart2=null;-->
+      <!--require.config({-->
+        <!--paths: {-->
+            <!--echarts:'./echarts/echarts',-->
+            <!--'echarts/chart/bar':'./echarts/chart/bar',-->
+            <!--'echarts/chart/line':'./echarts/chart/line'-->
+        <!--}-->
+      <!--});-->
+      <!--var dataStr=  window.index.getLoad();-->
+		<!--var json= $.parseJSON(dataStr);-->
+		<!--var labels=json.label;-->
+		<!--var datas=json.data;-->
+
+		<!--var dataStrBar=  window.index.getElectricity();-->
+		<!--var jsonBar= $.parseJSON(dataStrBar);-->
+		<!--var barlabels=jsonBar.label;-->
+		<!--var bardatas=jsonBar.data;-->
+
+     <!--require(['echarts','echarts/chart/bar','echarts/chart/line'],function(ec) {-->
+            <!--myChart=ec.init(document.getElementById('lineChart'));-->
+
+            <!--option = {-->
+                <!--calculable : false,-->
+                <!--title:{-->
+                    <!--text:'今日负荷',-->
+                    <!--x: 'center',-->
+                    <!--y: 'top'-->
+                <!--},-->
+                <!--grid:{x:55,y:30,x2:20,y2:20},-->
+                <!--xAxis : [-->
+                    <!--{-->
+                        <!--type : 'category',-->
+                        <!--boundaryGap : false,-->
+                        <!--data : labels-->
+                    <!--}-->
+                <!--],-->
+                <!--yAxis : [-->
+                    <!--{-->
+                        <!--type : 'value',-->
+                        <!--axisLabel : {-->
+                            <!--formatter: '{value} kW'-->
+                        <!--}-->
+                    <!--}-->
+                <!--],-->
+                <!--series : [-->
+                    <!--{-->
+                        <!--name:'',-->
+                        <!--type:'line',-->
+                        <!--data:datas-->
+                    <!--}-->
+                <!--]-->
+            <!--};-->
+            <!--myChart.setOption(option);-->
+
+
+           <!--myChart2=ec.init(document.getElementById('barChart'));-->
+
+           <!--var option2= {-->
+            <!--title:{-->
+                <!--text:'今日用电量',-->
+                <!--x: 'center',-->
+                <!--y: 'top'-->
+            <!--},-->
+            <!--grid: {-->
+                <!--x: 50,-->
+                <!--y: 45,-->
+                <!--x2:'2%',-->
+                <!--y2:40-->
+            <!--},-->
+            <!--xAxis : [-->
+                <!--{-->
+                    <!--type : 'category',-->
+                    <!--data :barlabels,-->
+                    <!--"axisLabel":{-->
+                        <!--interval: 3-->
+                    <!--}-->
+                <!--}-->
+            <!--],-->
+            <!--yAxis : [-->
+                <!--{-->
+                    <!--type : 'value',-->
+                    <!--show: true,-->
+                    <!--axisLabel : {-->
+                            <!--formatter: '{value} kWh'-->
+                    <!--}-->
+                <!--}-->
+            <!--],-->
+            <!--series : [-->
+                <!--{-->
+                    <!--name:'直接访问',-->
+                    <!--type:'bar',-->
+                    <!--itemStyle : { normal: {label : {show: false, position:'top'}}},-->
+                    <!--data:bardatas-->
+                <!--}-->
+            <!--]-->
+        <!--};-->
+        <!--myChart2.setOption(option2);-->
+        <!--});-->
+
+$('#add').click(function(){
+
+	window.index.add();
+});
+
+	var str = window.index.getDevice();
+	var list = $.parseJSON(str);
+	for(var i=0;i<list.devices.length;i++){
+		if(list.devices[i].equipment_type == 1){
+			var tr = '<tr id="kongtiao" deviceType="1" deviceId="'+list.devices[i].id+'"  endpointid="'+list.devices[i].endpointid+'">'+
+							'<td class="col-device"><span class="icon airconditioner"></span></td>'+
+							'<td><span>'+list.devices[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (list.devices[i].state.on?'on':'off') + '"></span></td>'+
+							'<td class="col-power">'+list.devices[i].mac+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+		if(list.devices[i].equipment_type == 2){
+			var tr = '<tr class="fengshan" deviceType="2" deviceId="'+list.devices[i].id+'" endpointid="'+list.devices[i].endpointid+'">'+
+							'<td class="col-device"><span class="icon electricfan"></span></td>'+
+							'<td><span>'+list.devices[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (list.devices[i].state.on?'on':'off') + '"></span></td>'+
+							'<td class="col-power">'+list.devices[i].mac+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+		if(list.devices[i].equipment_type == 0){
+			var tr = '<tr class="" deviceType="0" deviceId="'+list.devices[i].id+'" endpointid="'+list.devices[i].endpointid+'">'+
+							'<td class="col-device"><span class="icon gateway"></span></td>'+
+							'<td><span>'+list.devices[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (list.devices[i].state.on?'on':'off') + '"></span></td>'+
+							'<td class="col-power">--</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+	}
+	$('tr[deviceType=1]').on('click',function(){
+		window.index.control($(this).attr("deviceId"),"kt",$(this).attr("endpointid"));
+	});
+	$('tr[deviceType=2]').on('click',function(){
+		window.index.control($(this).attr("deviceId"),"fs",$(this).attr("endpointid"));
+	});
+
+
+      <!--$("#next").click(function(){-->
+            <!--if(show=="line"){-->
+                <!--showBar();-->
+            <!--}else if(show=="bar"){-->
+                <!--showLine();-->
+            <!--}else{-->
+                <!--window.index.toast("出错了!");-->
+            <!--}-->
+      <!--});-->
+
+
+
+     <!--showBar();-->
+     <!--function showLine(){-->
+        <!--show="line";-->
+        <!--$("#lineChart").hide();-->
+        <!--$("#barChart").show();-->
+        <!--myChart.resize();-->
+        <!--myChart2.resize();-->
+     <!--}-->
+
+    <!--function showBar(){-->
+        <!--show="bar";-->
+        <!--$("#barChart").hide();-->
+        <!--$("#lineChart").show();-->
+        <!--myChart.resize();-->
+        <!--myChart2.resize();-->
+    <!--}-->
+
+    <!--showProfit();-->
+    <!--function showProfit(){-->
+        <!--var dataStr=  window.index.profit();-->
+		<!--var json= $.parseJSON(dataStr);-->
+		<!--var profit_today=json.profit;-->
+		<!--var profit_total=json.profit_total;-->
+		<!--$("#profit_today").html(profit_today);-->
+		<!--$("#profit_total").html(profit_total);-->
+    <!--}-->
+</script>
+</body>
+</html>

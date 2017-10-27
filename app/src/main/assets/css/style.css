@@ -1,0 +1,77 @@
+*{margin:0;padding:0}body{background:#EFF3F5;font-size:14px;line-height:1.5}input,button,select,textarea{-webkit-box-sizing:border-box;box-sizing:border-box;color:inherit;font:inherit;border:0;-webkit-appearance:none;-moz-appearance:none;appearance:none;border-radius:0}ul{list-style:none}a{color:#1BBC9B;text-decoration:none}table{border-collapse:collapse;border-spacing:0;width:100%}#navbar{position:relative;height:44px;line-height:44px;background:#1BBC9B;text-align:center;color:#FFF}#navbar h1{font-size:16px;font-weight:normal}#navbar .location{position:absolute;top:0;left:0;background:url(../img/icon-location.png) no-repeat 10px 50%;-webkit-background-size:16px auto;background-size:16px auto;padding-left:35px;color:#fff}#navbar .back{position:absolute;top:0;left:0;background:url(../img/icon-back.png) no-repeat 10px 50%;-webkit-background-size:13px auto;background-size:13px auto;padding-left:30px;color:#fff}.loginform{max-width:345px;padding:0 15px;margin:30px auto}.loginform .logo{width:100px;margin:0 auto 30px}.loginform .logo img{width:100%;display:block}.loginform .field-group{margin-bottom:50px}.loginform .field{position:relative;margin-bottom:-1px}.loginform .field input{width:100%;height:44px;border:1px solid #D6D6D6;padding-left:1em;padding-right:1em}.loginform .field:first-child input{border-radius:4px 4px 0 0}.loginform .field:last-child input{border-radius:0 0 4px 4px}.loginform .eye-toggle{position:absolute;top:12px;right:20px;width:18px;height:18px;background:url(../img/icon-eye.png) no-repeat 50%;-webkit-background-size:18px auto;background-size:18px auto}.loginform button{background:#1BBC9B;border-radius:4px;color:#fff;width:100%;height:44px;margin-bottom:10px}.loginform .problem-link{float:left}.loginform .register-link{float:right}.section{background:#fff;margin-bottom:10px}.section-top{background-image:-webkit-gradient(linear, left top, left bottom, from(#1BBC9B), to(#6DC4B2));background-image:-webkit-linear-gradient(top, #1BBC9B 0%, #6DC4B2 100%);background-image:linear-gradient(-180deg, #1BBC9B 0%, #6DC4B2 100%);color:#fff;text-align:center;overflow:hidden}.section-hd{padding:10px;}.section-title{font-size:12px;color:#9B9B9B;font-weight:normal}.section-income{line-height:1.2}.section-income .yesterday{margin-top:15px;margin-bottom:20px}.section-income .yesterday strong{display:block;font-weight:normal;font-size:48px}.section-income .total{margin-bottom:30px}.section-income .total span{font-size:12px}.section-income .total strong{display:block;font-weight:normal;font-size:18px}.device-table{color:#9B9B9B;}.device-table thead{font-size:12px}.device-table th,.device-table td{text-align:center;padding:10px;font-weight:normal}.device-table td{padding-top:0;padding-bottom:0}.device-table .icon{display:inline-block;width:48px;height:48px;background:no-repeat 50%;-webkit-background-size:48px auto;background-size:48px auto}.device-table .airconditioner{background-image:url(../img/device-airconditioner.png)}.device-table .electricfan{background-image:url(../img/device-electricfan.png)}.device-table .gateway{background-image:url(../img/device-gateway.png)}.device-table .indicator{display:inline-block;height:20px;width:20px;border-radius:50%;background:#1BBC9B}.device-table .indicator.off{background-color:#F37272}.device-table .col-device{width:60px}.device-table .col-power{width:80px;font-size:12px}.record-list{color:#1BBC9B}.record-list .date{font-weight:normal;font-size:12px;margin:10px 0 0 10px}.record-list li{border-bottom:1px solid #D6D6D6}.record-list li ul li{position:relative;padding:10px 0;margin-left:80px;height:48px;border-bottom:1px solid #D6D6D6}.record-list li ul li:last-child{border-bottom:none}.record-list .icon{position:absolute;top:10px;left:-64px;width:48px;height:48px;background:no-repeat 50%;-webkit-background-size:48px auto;background-size:48px auto}.record-list .airconditioner{background-image:url(../img/device-airconditioner.png)}.record-list .electricfan{background-image:url(../img/device-electricfan.png)}.record-list .gateway{background-image:url(../img/device-gateway.png)}.record-list .name{display:inline-block;margin-top:15px}.record-list .val{float:right;font-size:18px;margin-top:12px;margin-right:15px}.message-list li{border-bottom:1px solid #D6D6D6;clear:both;overflow:hidden;padding:12px 15px}.message-list .avatar{float:left;width:46px;height:46px;margin-right:15px}.message-list .avatar img{width:100%;height:100%}.message-list .body{overflow:hidden}.message-list .name{float:left;margin-bottom:5px;font-size:1em;font-weight:normal}.message-list .date{float:right;font-size:12px;color:#9B9B9B}.message-list .message{clear:both;color:#9B9B9B;font-size:12px}.section-userinfo{text-align:center;font-size:16px}.section-userinfo .avatar{width:90px;height:90px;margin-top:15px;margin-bottom:10px;vertical-align:top}.section-userinfo .name{font-weight:normal;display:block;margin-bottom:10px}.section-userinfo .mobile{display:block;margin-bottom:20px}.setting-grid{margin-top:-10px}.setting-grid li{width:33.333%;height:125px;-webkit-box-sizing:border-box;box-sizing:border-box;float:left;border-right:1px solid #D6D6D6;border-bottom:1px solid #D6D6D6;text-align:center}.setting-grid li:nth-child(3n){border-right:none}.setting-grid a{display:block;color:#000}.setting-grid .icon{text-align:center;display:block;margin:25px auto 15px;width:48px;height:48px;background:no-repeat 50%;-webkit-background-size:contain;background-size:contain}.setting-grid .icon-devices{background-image:url(../img/icon-devices.png)}.setting-grid .icon-message{background-image:url(../img/icon-message.png)}.setting-grid .icon-help{background-image:url(../img/icon-help.png)}.setting-grid .icon-update{background-image:url(../img/icon-update.png)}.setting-grid .icon-about{background-image:url(../img/icon-about.png)}.setting-grid .text{display:block;font-size:12px}.section-devicestatus{position:relative;height:200px}.section-devicestatus .icon{position:absolute;width:53px;height:53px;background:no-repeat 50%;-webkit-background-size:contain;background-size:contain}.section-devicestatus .icon-snow{background-image:url(../img/icon-snow.png);top:25px;left:25px}.section-devicestatus .icon-wind{background-image:url(../img/icon-wind.png);top:25px;right:25px}.section-devicestatus .icon-breeze{background-image:url(../img/icon-breeze.png);bottom:25px;right:25px}.section-devicestatus .status{position:absolute;bottom:25px;left:25px;font-size:36px}.section-devicestatus .temp{margin:50px auto 0;display:block;font-size:80px;font-weight:normal;width:2em;line-height:1}.controller{text-align:center;margin:60px 0}.controller .round-btns{margin-bottom:40px}.controller .round-btns button{margin:0 10px;border:none;width:70px;height:70px;border-radius:50%;background-image:-webkit-gradient(linear, left top, left bottom, from(#818181), to(#4A4A4A));background-image:-webkit-linear-gradient(top, #818181 0%, #4A4A4A 100%);background-image:linear-gradient(-180deg, #818181 0%, #4A4A4A 100%);-webkit-box-shadow:1px 2px 3px 0px rgba(13,13,13,0.5),inset 0px 1px 3px 0px rgba(255,255,255,0.5);box-shadow:1px 2px 3px 0px rgba(13,13,13,0.5),inset 0px 1px 3px 0px rgba(255,255,255,0.5)}.controller .round-btns button .icon{display:inline-block;width:45px;height:45px;background:no-repeat 50%;-webkit-background-size:contain;background-size:contain;vertical-align:middle}.controller .round-btns .increase .icon{background-image:url(../img/icon-increase.png)}.controller .round-btns .decrease .icon{background-image:url(../img/icon-decrease.png)}.controller .round-btns .power .icon{background-image:url(../img/icon-power.png)}.controller .round-btns .power{background-image:-webkit-gradient(linear, left top, left bottom, from(#EE9B9B), to(#D86262));background-image:-webkit-linear-gradient(top, #EE9B9B 0%, #D86262 100%);background-image:linear-gradient(-180deg, #EE9B9B 0%, #D86262 100%);-webkit-box-shadow:1px 2px 3px 0px rgba(82,69,69,0.5),inset 0px 1px 3px 0px rgba(255,255,255,0.5);box-shadow:1px 2px 3px 0px rgba(82,69,69,0.5),inset 0px 1px 3px 0px rgba(255,255,255,0.5)}.controller .normal-btns{width:170px;margin:0 auto}.controller .normal-btns button{width:170px;height:46px;color:#fff;background-image:-webkit-gradient(linear, left top, left bottom, from(#49C1A8), to(#63AD9E));background-image:-webkit-linear-gradient(top, #49C1A8 0%, #63AD9E 100%);background-image:linear-gradient(-180deg, #49C1A8 0%, #63AD9E 100%);-webkit-box-shadow:0px 2px 3px 0px #70837F,inset 0px 1px 3px 0px rgba(225,225,225,0.5);box-shadow:0px 2px 3px 0px #70837F,inset 0px 1px 3px 0px rgba(225,225,225,0.5);border-radius:54px;margin-bottom:20px;font-size:20px}
+.section-devicestatus .bian {
+	border:1px solid black;
+	width:150px;
+	height:52px;
+	position: absolute;
+	top: 45px;
+	right: 25px;
+}
+
+.section-devicestatus .val1 {
+	width:60px;
+	height:22px;
+	text-align:right;
+	display:inline-block;
+}
+.section-devicestatus .val2 {
+	width:60px;
+	height:22px;
+	text-align:right;
+	display:inline-block;
+}
+.section-devicestatus .dian {
+	position: absolute;
+	top: 45px;
+	right: 30px;
+	font-size: 20px
+}
+
+.section-devicestatus .fuhe {
+	position: absolute;
+	top: 70px;
+	right: 50px;
+	font-size: 20px
+}
+
+
+#navbar .refresh {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background: url(../img/refresh.png) no-repeat 10px 50%;
+	-webkit-background-size: 13px auto;
+	background-size: 13px auto;
+	padding-left: 30px;
+	color: #fff
+}
+
+.setting-grid2 li{
+width:33.333%;height:180px;
+-webkit-box-sizing:border-box;box-sizing:border-box;
+float:left;text-align:center}
+.setting-grid2 li:nth-child(3n){border-right:none}
+.setting-grid2 a{display:block;color:#000}
+.setting-grid2 .icon{
+text-align:center;display:block;margin:25px auto 15px;
+width:48px;height:48px;background:no-repeat 50%;
+-webkit-background-size:contain;background-size:contain}
+.setting-grid2 .icon-hj{background-image:url(../img/hj.png)}
+.setting-grid2 .icon-lj{background-image:url(../img/lj.png)}
+.setting-grid2 .icon-xx{background-image:url(../img/xx.png)}
+.setting-grid2 .icon-cf{background-image:url(../img/cf.png)}
+.setting-grid2 .icon-sj{background-image:url(../img/sj.png)}
+
+
+#navbar .increase2 {
+	position: absolute;
+	top: 0;
+	right: 10px;
+	/*background: url(../img/btn_home_add.png) no-repeat 10px 50%;*/
+	-webkit-background-size: 13px auto;
+	background-size: 20px auto;
+	padding-left: 30px;
+	color: #fff
+}
+
+.device-table .chuanglian{background-image:url(../img/chuanglian.png)}

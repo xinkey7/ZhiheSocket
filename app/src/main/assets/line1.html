@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="./echarts/esl.js"></script>
+</head>
+<body>
+  <div id="main" style="width:100%;height:200px;border:solid 1px #ccc;padding:10px;margin:100px auto 10px;"></div>
+  
+<script type="text/javascript">
+       //为模块加载器配置echarts的路径，这里主要是配置map图表的路径，其他的图表跟map的配置还不太一样，下边也会做另一种类型的图表事例。
+        require.config({
+            paths: {
+                echarts:'./echarts/echarts',
+                'echarts/chart/bar':'./echarts/chart/bar',
+                'echarts/chart/line':'./echarts/chart/line'
+            }
+        });
+       //动态加载echarts，在回掉函数中使用，要注意保持按需加载结构定义图表路径
+      require(['echarts','echarts/chart/bar','echarts/chart/line'],function(ec) {
+            var myChart=ec.init(document.getElementById('main'));
+      //option主要是图标的一些设置，这不是这篇文章的重点，关于具体的设置可以参考官方的文档说明文档
+option = {
+    title : {
+        text: '未来一周气温变化',
+        subtext: '纯属虚构'
+    },
+    tooltip : {
+        trigger: 'axis'
+    },
+    legend: {
+        data:['最高气温','最低气温']
+    },
+    toolbox: {
+        show : true,
+        feature : {
+            mark : {show: true},
+            dataView : {show: true, readOnly: false},
+            magicType : {show: true, type: ['line', 'bar']},
+            restore : {show: true},
+            saveAsImage : {show: true}
+        }
+    },
+    calculable : true,
+    xAxis : [
+        {
+            type : 'category',
+            boundaryGap : false,
+            data : ['周一','周二','周三','周四','周五','周六','周日']
+        }
+    ],
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel : {
+                formatter: '{value} °C'
+            },
+            splitArea : {show : true}
+        }
+    ],
+    series : [
+        {
+            name:'最高气温',
+            type:'line',
+            itemStyle: {
+                normal: {
+                    lineStyle: {
+                        shadowColor : 'rgba(0,0,0,0.4)',
+                        shadowBlur: 5,
+                        shadowOffsetX: 3,
+                        shadowOffsetY: 3
+                    }
+                }
+            },
+            data:[11, 11, 15, 13, 12, 13, 10],
+            markPoint : {
+                data : [
+                    {type : 'max', name: '最大值'},
+                    {type : 'min', name: '最小值'}
+                ]
+            },
+            markLine : {
+                data : [
+                    {type : 'average', name: '平均值'}
+                ]
+            }
+        },
+        {
+            name:'最低气温',
+            type:'line',
+            itemStyle: {
+                normal: {
+                    lineStyle: {
+                        shadowColor : 'rgba(0,0,0,0.4)',
+                        shadowBlur: 5,
+                        shadowOffsetX: 3,
+                        shadowOffsetY: 3
+                    }
+                }
+            },
+            data:[1, -2, 2, 5, 3, 2, 0],
+            markPoint : {
+                data : [
+                    {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
+                ]
+            },
+            markLine : {
+                data : [
+                    {type : 'average', name : '平均值'}
+                ]
+            }
+        }
+    ]
+};
+                
+
+      //以下的这段代码主要是用来处理用户的选择，应用场景是可以做地图的交互，比如点击地图上的某一个省，获取相应的省的指标变化等。
+     //需要特别注意的是，如果需要点击某一省作地图的操作交互的话，还需要为series属性的每一项添加一个selectedMode属性，这里的属性值为 'single'即单选，也可多选
+
+            console.log(option);
+            myChart.setOption(option);
+
+        });
+
+    </script>
+  </body>
+</html>
