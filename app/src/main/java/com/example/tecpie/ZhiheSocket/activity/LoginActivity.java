@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.tecpie.ZhiheSocket.Cutil.AppClient;
 import com.example.tecpie.ZhiheSocket.Cutil.AppClientHandle;
+import com.example.tecpie.ZhiheSocket.Cutil.bean.BaseResponse;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.ChannelBean;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.LoginResponse;
 import com.example.tecpie.ZhiheSocket.Cutil.service.RequestService;
@@ -134,10 +135,17 @@ public class LoginActivity extends BaseActivity{
         @JavascriptInterface
         public void detail(String title){
             Toast.makeText(LoginActivity.this,title,Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(LoginActivity.this,SocketInfoActivity.class);
-            intent.putExtra("title",title);
-            startActivity(intent);
-            JPushInterface.setAliasAndTags(LoginActivity.this,"test",null);
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+            String netEntitiesJason = preferences.getString("collection-netEntities", "");
+            List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netEntitiesJason);
+            Log.i("detail",netEntities.toString());
+            if(netEntities.get(Integer.valueOf(title).intValue()).getIsOk()==1){
+                Intent intent = new Intent(LoginActivity.this,SocketInfoActivity.class);
+                intent.putExtra("title",title);
+                startActivity(intent);
+                JPushInterface.setAliasAndTags(LoginActivity.this,"test",null);
+            }
+
         }
 
         @JavascriptInterface
@@ -181,13 +189,13 @@ public class LoginActivity extends BaseActivity{
             ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
 
 
-            if(ctx!=null){
+            /*if(ctx!=null){
                 Toast.makeText(LoginActivity.this,"连接成功",Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(LoginActivity.this,"连接失败",Toast.LENGTH_SHORT).show();
-            }
+            }*/
 
-            //Toast.makeText(LoginActivity.this,"连接成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this,"连接成功",Toast.LENGTH_SHORT).show();
 
 
 
@@ -223,12 +231,24 @@ public class LoginActivity extends BaseActivity{
                 String netEntityJasonArray = preferences.getString("collection-netEntities","");
 
                 if(netEntityJasonArray.equals("")){
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.reload();
+                        }
+                    });
                     automation();
                     return;
                 }else{
                     List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netEntityJasonArray);
                     for(int i=0;i<netEntities.size();i++){
                         if(netEntities.get(i).getMac().equals(preferences.getString("current-mac",""))){
+                            LoginActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    webView.reload();
+                                }
+                            });
                             exist = true;
                             Intent intent = new Intent(LoginActivity.this,SocketInfoActivity.class);
                             intent.putExtra("title",""+i);
@@ -239,6 +259,12 @@ public class LoginActivity extends BaseActivity{
                     }
                 }
                 if(!exist){
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            webView.reload();
+                        }
+                    });
                     automation();
                     return;
                 }
@@ -256,16 +282,15 @@ public class LoginActivity extends BaseActivity{
             ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
             try {
                 appClientHandle.channelInactive(ctx);
-                SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=preferences.edit();
-                editor.putString("current-mac","");
-                editor.putString("current-panid","");
-                editor.putString("current-profile","");
-                editor.putString("current-channel","");
-                editor.putString("current-gateway","");
-                editor.putString("current-data","");
-                editor.commit();
+
+                clearCurrent();
                 Toast.makeText(LoginActivity.this,"连接已断开",Toast.LENGTH_SHORT).show();
+                LoginActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        webView.reload();
+                    }
+                });
             } catch (Exception e) {
                 Toast.makeText(LoginActivity.this,"断开失败",Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -307,16 +332,82 @@ public class LoginActivity extends BaseActivity{
 
 
             SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
-            String netEntities = preferences.getString("collection-netEntities", "");
-            Log.i("netEntities",netEntities);
-            return netEntities;
+            SharedPreferences.Editor editor=preferences.edit();
+            String netEntitiesJsonArray = preferences.getString("collection-netEntities", "");
+            if(netEntitiesJsonArray.equals("")){
+                return "";
+            }
+            Gson gson = new Gson();
+            List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netEntitiesJsonArray);
+            for(int i=0;i<netEntities.size();i++){
+                if(netEntities.get(i).getMac().equals(preferences.getString("current-mac",""))){
+                    netEntities.get(i).setIsOk(1);
+                }else{
+                    netEntities.get(i).setIsOk(0);
+                }
+            }
+            String netEntitiesResult = gson.toJson(netEntities);
+            editor.putString("collection-netEntities",netEntitiesResult);
+            editor.commit();
+            Log.i("netEntities",netEntitiesResult);
+            return netEntitiesResult;
             //Log.i("str",str);
            // return str;
 
         }
 
 
+        @JavascriptInterface
+        public void open(){
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+            if(preferences.getString("current-mac","").equals("")){
+                Toast.makeText(LoginActivity.this,"请先建立连接并通讯",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Toast.makeText(SocketInfoActivity.this,"开网中",Toast.LENGTH_SHORT).show();
 
+            //获取单个插座
+            ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
+            requestService.baseRequest(ctx, "0002", "gateway");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            BaseResponse baseResponse = ChannelBean.getBaseResponse();
+            if(baseResponse.getResult()==1){
+                Toast.makeText(LoginActivity.this,"开网成功",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(LoginActivity.this,"开网失败",Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @JavascriptInterface
+        public void close(){
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+            if(preferences.getString("current-mac","").equals("")){
+                Toast.makeText(LoginActivity.this,"请先建立连接并通讯",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            // Toast.makeText(SocketInfoActivity.this,"开网中",Toast.LENGTH_SHORT).show();
+
+            //获取单个插座
+            ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
+            requestService.baseRequest(ctx, "0003", "gateway");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            BaseResponse baseResponse = ChannelBean.getBaseResponse();
+            if(baseResponse.getResult()==1){
+                Toast.makeText(LoginActivity.this,"关网成功",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(LoginActivity.this,"关网失败",Toast.LENGTH_SHORT).show();
+            }
+        }
 
 
         @JavascriptInterface
@@ -422,6 +513,25 @@ public class LoginActivity extends BaseActivity{
             Toast.makeText(this, "内存卡不存在！", Toast.LENGTH_SHORT).show();
             return ;
         }
+    }
+    private  void clearCurrent() {
+        SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor=preferences.edit();
+        editor.putInt("current-id",1);
+        editor.putInt("current-selectedId",0);
+        editor.putString("current-wifiName","");
+        editor.putString("current-netName","");
+        editor.putString("current-sockets","");
+        editor.putString("current-selectedSN","");
+        editor.putString("current-selectedName","");
+        editor.putString("current-selectedType","");
+        editor.putString("current-mac","");
+        editor.putString("current-panid","");
+        editor.putString("current-profile","");
+        editor.putString("current-channel","");
+        editor.putString("current-gateway","");
+        editor.putString("current-data","");
+        editor.commit();
     }
 
 

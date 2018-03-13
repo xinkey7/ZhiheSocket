@@ -43,15 +43,16 @@ border-bottom-left-radius:1em;
 	</section>
 
 	<ul class="setting-grid">
-		<li id="automation"><a href="#"><span class="icon icon-devices"></span><span class="text">添加网关</span></a></li>
-
-
-		<li id="import"><a href="#"><span class="icon icon-import"></span><span class="text">导入配置</span></a></li>
-		<li id="info"><a href="#"><span class="icon icon-help"></span><span class="text">使用说明</span></a></li>
-
 		<li id="connect"><a href="#"><span class="icon icon-connect"></span><span class="text">建立连接</span></a></li>
 		<li id="disconnect"><a href="#"><span class="icon icon-disconnect"></span><span class="text">断开连接</span></a></li>
 		<li id="login"><a href="#"><span class="icon icon-update"></span><span class="text">通讯登录</span></a></li>
+		<li id="open"><a href="#"><span class="icon icon-open"></span><span class="text">开网</span></a></li>
+
+		<li id="close"><a href="#"><span class="icon icon-close"></span><span class="text">关网</span></a></li>
+		<li id="import"><a href="#"><span class="icon icon-import"></span><span class="text">导入配置</span></a></li>
+
+
+
 	</ul>
 	<div style="height:270px"></div>
 	<div class="section-bd">
@@ -97,15 +98,27 @@ border-bottom-left-radius:1em;
 			console.log(list);
 
 			for(var i=0;i<list.length;i++){
-
-
-					var tr = '<tr  title="'+i+'" onclick="detail('+i+')" class="touchArea"  style="height:50px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;"    >'+
-
+			var tr;
+			if(list[i].isOk==1){
+			tr = '<tr  title="'+i+'" onclick="detail('+i+')" class="touchArea"  style="height:50px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;"    >'+
+				'<td title="'+i+'"><span class="indicator on"></td>'+
 				'<td title="'+i+'"><span title="'+i+'" style="margin-left:0px;">'+list[i].name+'</span></td>'+
 
 				'<td  title="'+i+'"><span title="'+i+'" id="name" style="margin-left:0px;">'+list[i].mac+'</span></td>'+
 				'<td  title="'+i+'" ><button title="b'+i+'" class="tbutton"  style ="display:none;width:50px;margin-top:6px" type="button" id="delete'+i+'">删除</button></td>'+
 			'</tr>';
+			}else{
+			tr = '<tr  title="'+i+'" onclick="detail('+i+')" class="touchArea"  style="height:50px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;"    >'+
+				'<td title="'+i+'"><span class="indicator off"></td>'+
+				'<td title="'+i+'"><span title="'+i+'" style="margin-left:0px;">'+list[i].name+'</span></td>'+
+
+				'<td  title="'+i+'"><span title="'+i+'" id="name" style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+				'<td  title="'+i+'" ><button title="b'+i+'" class="tbutton"  style ="display:none;width:50px;margin-top:6px" type="button" id="delete'+i+'">删除</button></td>'+
+			'</tr>';
+			}
+
+
+
 					console.log(tr);
 					$('#tlist').append(tr);
 
@@ -129,6 +142,12 @@ border-bottom-left-radius:1em;
 	});
 	$('#login').on('click',function(){
 		window.login.login();
+	});
+	$('#open').on('click',function(){
+		window.login.open();
+	});
+	$('#close').on('click',function(){
+		window.login.close();
 	});
 
 

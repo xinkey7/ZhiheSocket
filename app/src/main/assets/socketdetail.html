@@ -8,10 +8,13 @@
 
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style2.css">
     <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
     <script src='js/jquery-ui.js'></script>
     <script src="js/prefixfree.min.js"></script>
     <script src="js/index.js"></script>
+    <script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
+    <noscript><link rel="stylesheet" type="text/css" href="css/noJS.css" /></noscript>
     <style>
 	 .scanbutton {
 		  position: absolute;
@@ -85,6 +88,10 @@ border-bottom-left-radius:1em;
 
         }
 
+        .loginform .field-group {
+            margin-bottom: 0px;
+        }
+
 
     </style>
 </head>
@@ -107,6 +114,13 @@ border-bottom-left-radius:1em;
                        style ="margin-top:20px;border-radius:6px;">
                 <!--<span class="eye-toggle"></span>-->
             </div>
+            <div id="dd" style="width:134px;margin-top:20px;margin-left:0px;background:#1BBC9B;border-radius: 4px;" class="wrapper-dropdown-1" tabindex="1">
+                <span>插座种类</span>
+                <ul  class="dropdown" tabindex="1">
+                    <li><a href="#">10</a></li>
+                    <li><a href="#">16</a></li>
+                </ul>
+            </div>
         </div>
 
     </form>
@@ -114,42 +128,42 @@ border-bottom-left-radius:1em;
     <ul id="hlist" class="record-list" >
 
         <div class="section-bd">
-            <table class="device-table" style="margin-left:6px;margin-top:10px;width:96%;background:#fff">
+            <table class="device-table" style="margin-left:6px;margin-top:0px;width:96%;background:#fff">
 
                 <tbody id="hislist" >
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
 					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
 
                     <td ><span  style="margin-left:0px;">继电器状态：</span></td>
-                    <td  ><span class="indicator on"></span></td>
+                    <td  id="state"><span class="indicator on"></span></td>
 
                 </tr>
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
 					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
 
                     <td ><span  style="margin-left:0px;">功率：</span></td>
-                    <td  ><span  style="margin-left:0px;">220w</span></td>
+                    <td  ><span id="power" style="margin-left:0px;">220w</span></td>
 
                 </tr>
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
 					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
 
                     <td ><span  style="margin-left:0px;">电量：</span></td>
-                    <td  ><span  style="margin-left:0px;">3kwh</span></td>
+                    <td  ><span id="consum" style="margin-left:0px;">3kwh</span></td>
 
                 </tr>
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
 					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
 
                     <td ><span  style="margin-left:0px;">电压：</span></td>
-                    <td  ><span  style="margin-left:0px;">220v</span></td>
+                    <td  ><span id="vol" style="margin-left:0px;">220v</span></td>
 
                 </tr>
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
 					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
 
                     <td ><span  style="margin-left:0px;">电流：</span></td>
-                    <td  ><span  style="margin-left:0px;">1A</span></td>
+                    <td  ><span  id="cur" style="margin-left:0px;">1A</span></td>
 
                 </tr>
 
@@ -162,7 +176,7 @@ border-bottom-left-radius:1em;
         </div>
     </ul>
 
-    <form class="loginform">
+    <form class="loginform" style="margin-bottom:0px;margin-top:16px">
 
         <button type="button" id="confirm">确认</button>
         <button type="button" id="delete">删除此插座</button>
@@ -182,8 +196,79 @@ border-bottom-left-radius:1em;
 </section>
 <script src="js/spin.js"></script>
 <script>
+
+var type="";
+			function DropDown(el) {
+				this.dd = el;
+				this.placeholder = this.dd.children('span');
+				this.opts = this.dd.find('ul.dropdown > li');
+				this.val = '';
+				this.index = -1;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						return false;
+					});
+
+					obj.opts.on('click',function(){
+						var opt = $(this);
+						obj.val = opt.text();
+						obj.index = opt.index();
+						obj.placeholder.text('插座种类: ' + obj.val+'A');
+						type = obj.val;
+						console.log(type);
+					});
+				},
+				getValue : function() {
+					return this.val;
+				},
+				getIndex : function() {
+					return this.index;
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-1').removeClass('active');
+				});
+
+			});
+
+
+
+
+
 initSocket();
 function initSocket(){
+var SN = window.socketDetail.getSN();
+var name = window.socketDetail.getName();
+var state = window.socketDetail.getState();
+var power = window.socketDetail.getPower();
+var consum = window.socketDetail.getConsum();
+var vol = window.socketDetail.getVol();
+var cur = window.socketDetail.getCur();
+$('#SN').val(SN);
+$('#name').val(name);
+if(state=="0"){
+$('#state').html('<span class="indicator off"></span>');
+}else{
+$('#state').html('<span class="indicator on"></span>');
+}
+$('#power').html(power);
+$('#consum').html(consum);
+$('#vol').html(vol);
+$('#cur').html(cur);
+
+
 
 }
 function back(){
@@ -203,6 +288,11 @@ $('#confirm').click(function(){
 	window.socketDetail.confirm(SN,name,type);
 	}
 
+	});
+
+
+$('#scan').click(function(){
+	     window.socketDetail.scan();
 	});
 
     </script>

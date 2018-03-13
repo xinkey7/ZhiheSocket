@@ -341,7 +341,7 @@ public class SocketManageActivity extends BaseActivity{
 
                 }
                 editor.commit();
-                clearCurrent();
+                //clearCurrent();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -373,19 +373,26 @@ public class SocketManageActivity extends BaseActivity{
 
             String socketsJsonArray = preferences.getString("current-sockets", "");
             List<SocketEntity> sockets = new ArrayList<SocketEntity>();
-            JsonParser parser = new JsonParser();
-            JsonArray jsonArray = parser.parse(socketsJsonArray).getAsJsonArray();
-            for (JsonElement s : jsonArray) {
-                //使用GSON，直接转成Bean对象
-                SocketEntity socketEntity = gson.fromJson(s, SocketEntity.class);
-                sockets.add(socketEntity);
+            if(!socketsJsonArray.equals("")){
+                JsonParser parser = new JsonParser();
+                JsonArray jsonArray = parser.parse(socketsJsonArray).getAsJsonArray();
+                for (JsonElement s : jsonArray) {
+                    //使用GSON，直接转成Bean对象
+                    SocketEntity socketEntity = gson.fromJson(s, SocketEntity.class);
+                    sockets.add(socketEntity);
+                }
             }
+
             NetEntity netEntity = new NetEntity();
             netEntity.setSockets(sockets);
             netEntity.setName(netName);
             netEntity.setWifi(preferences.getString("current-wifiName", ""));
             netEntity.setMac(preferences.getString("current-mac", ""));
-            netEntity.setIsOk(1);
+            netEntity.setIsOk(0);
+            netEntity.setChannel(preferences.getString("current-channel", ""));
+            netEntity.setGateway(preferences.getString("current-gateway", ""));
+            netEntity.setPanid(preferences.getString("current-panid",""));
+            netEntity.setProfile(preferences.getString("current-profile", ""));
 
             Write_Files(gson.toJson(netEntity),saveFile);
             Toast.makeText(SocketManageActivity.this,"读写完毕",Toast.LENGTH_SHORT).show();
@@ -411,7 +418,7 @@ public class SocketManageActivity extends BaseActivity{
                 editor.putString("collection-netEntities",newNetsJsonArray);
             }
             editor.commit();
-            clearCurrent();
+            //clearCurrent();
             Intent intent = new Intent(SocketManageActivity.this,LoginActivity.class);
             startActivity(intent);
 

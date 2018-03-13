@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.example.tecpie.ZhiheSocket.Cutil.bean.BaseResponse;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.ChannelBean;
+import com.example.tecpie.ZhiheSocket.Cutil.bean.DispatchSocketRequest;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.ReadSocketResponse;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.SocketBean;
+import com.example.tecpie.ZhiheSocket.Cutil.bean.SocketDataRequest;
 import com.example.tecpie.ZhiheSocket.Cutil.bean.SocketDataResponse;
 import com.example.tecpie.ZhiheSocket.Cutil.service.RequestService;
 import com.example.tecpie.ZhiheSocket.Cutil.serviceImpl.RequestServiceImpl;
@@ -37,8 +39,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
@@ -59,6 +64,8 @@ public class SocketInfoActivity extends BaseActivity{
     private FileOutputStream outStream;
     private FileInputStream inStream;
     private String AbsolutePath;
+    private File readDir;
+    private File saveDir;
     private RequestService requestService = new RequestServiceImpl();
 
     @Override
@@ -71,18 +78,19 @@ public class SocketInfoActivity extends BaseActivity{
         webView.addJavascriptInterface(new LoginJsInterface(),"socketInfo");
         //得到SD卡路径
         sdCardDir = Environment.getExternalStorageDirectory();
+
         AbsolutePath = (String) sdCardDir.getAbsolutePath();
+        saveDir = new File(AbsolutePath+"/zigBeeOutput");
         //Toast.makeText(this, "路径为"+AbsolutePath+"sdCardDir::"+sdCardDir, Toast.LENGTH_LONG).show();
-        File saveDir = new File(AbsolutePath+"/zigBeeOutput");
+
         if(!saveDir.exists()){
             saveDir.mkdirs();
         }
-        File readDir = new File(AbsolutePath+"/zigBeeInput");
+        readDir = new File(AbsolutePath+"/zigBeeInput");
         if(!readDir.exists()){
             readDir.mkdirs();
         }
-        saveFile = new File(saveDir,"test.txt");
-        readFile = new File(readDir,"test.txt");
+
     }
 
 
@@ -144,10 +152,31 @@ public class SocketInfoActivity extends BaseActivity{
 
         @JavascriptInterface
         public void detail(String id){
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
             Toast.makeText(SocketInfoActivity.this,id,Toast.LENGTH_SHORT).show();
             //获取单个插座
             ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
-            requestService.baseRequest(ctx, "0007", "gateway");
+            SocketDataRequest request = new SocketDataRequest();
+            request.setCode("0007");
+            List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(preferences.getString("collection-netEntities",""));
+            List<SocketEntity> sockets = new ArrayList<SocketEntity>();
+            SocketEntity socket = new SocketEntity();
+            NetEntity netEntity = new NetEntity();
+            for(NetEntity n: netEntities){
+                if(n.getMac().equals(preferences.getString("current-mac",""))){
+                    sockets = n.getSockets();
+                }
+            }
+            String socketname="";
+            for(SocketEntity s : sockets){
+                if(s.getId()==Integer.valueOf(id).intValue()){
+                    request.setIeee(transfer(s.getSerialNumber()));
+                    socketname = s.getName();
+                }
+
+            }
+
+            requestService.socketDataRequest(ctx, request, "gateway");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -160,6 +189,8 @@ public class SocketInfoActivity extends BaseActivity{
             Log.i("debugs",socketDataResponseJsonArray);
             Intent intent = new Intent(SocketInfoActivity.this,SocketDetailActivity.class);
             intent.putExtra("socketData",socketDataResponseJsonArray);
+            intent.putExtra("socketName",socketname);
+
             startActivity(intent);
             JPushInterface.setAliasAndTags(SocketInfoActivity.this,"test",null);
 
@@ -252,33 +283,154 @@ public class SocketInfoActivity extends BaseActivity{
             SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
             String netsJsonArray = preferences.getString("collection-netEntities", "");
 
-            JsonParser parser = new JsonParser();
-            JsonArray jsonArray = parser.parse(netsJsonArray).getAsJsonArray();
-            List<NetEntity> netEntities = new ArrayList<NetEntity>();
-            for (JsonElement n : jsonArray) {
-                //使用GSON，直接转成Bean对象
-                NetEntity netEn = gson.fromJson(n, NetEntity.class);
-                netEntities.add(netEn);
+
+            List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netsJsonArray);
+            List<SocketEntity> socketEntities = new ArrayList<SocketEntity>();
+            for(NetEntity n :netEntities){
+                if(n.getMac().equals(preferences.getString("current-mac",""))){
+                    socketEntities = netEntities.get(index).getSockets();
+                }
             }
-            List<SocketEntity> socketEntities = netEntities.get(index).getSockets();
+
             Log.i("socketEntities",gson.toJson(socketEntities));
            return gson.toJson(socketEntities);
 
 
 
         }
+
         @JavascriptInterface
         public void netinfo(){
 
             Intent intent = new Intent(SocketInfoActivity.this,NetDetailActivity.class);
             startActivity(intent);
         }
+
         @JavascriptInterface
         public void save(){
-            Write_Files("test1231456778",saveFile);
+            String title = getIntent().getStringExtra("title");
+            int index= Integer.valueOf(title).intValue();
+            Gson gson = new Gson();
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+            String netsJsonArray = preferences.getString("collection-netEntities", "");
+
+
+            List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netsJsonArray);
+
+            List<SocketEntity> socketEntities = netEntities.get(index).getSockets();
+            String macAddress = preferences.getString("current-mac","");
+            saveFile = new File(saveDir,"saveFile"+macAddress+".txt");
+            Log.i("save","saveFile"+macAddress+".txt");
+            NetEntity netEntity = new NetEntity();
+            netEntity.setSockets(socketEntities);
+            netEntity.setName(preferences.getString("current-netName",""));
+            netEntity.setWifi(preferences.getString("current-wifiName", ""));
+            netEntity.setMac(preferences.getString("current-mac", ""));
+            netEntity.setIsOk(0);
+            netEntity.setChannel(preferences.getString("current-channel", ""));
+            netEntity.setGateway(preferences.getString("current-gateway", ""));
+            netEntity.setPanid(preferences.getString("current-panid",""));
+            netEntity.setProfile(preferences.getString("current-profile", ""));
+            Log.i("save",saveFile.getPath());
+            Write_Files(gson.toJson(netEntity),saveFile);
             Toast.makeText(SocketInfoActivity.this,"读写完毕",Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(SocketInfoActivity.this,LoginActivity.class);
             startActivity(intent);
+
+        }
+
+        @JavascriptInterface
+        public void handon(){
+            Gson gson = new Gson();
+            SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor=preferences.edit();
+
+            String netsEntitiesJsonArray = preferences.getString("collection-netEntities", "");
+
+            List<NetEntity> nets = ParseGson.parseNetEntityJasonArray(netsEntitiesJsonArray);
+
+            List<SocketEntity> sockets = new ArrayList<SocketEntity>();
+            for(NetEntity n: nets){
+                if(n.getMac().equals(preferences.getString("current-mac",""))){
+                    sockets = n.getSockets();
+                }
+            }
+
+
+            //网关下发
+            ChannelHandlerContext ctx = ChannelBean.getChannel("channel");
+            DispatchSocketRequest request = new DispatchSocketRequest();
+            if(preferences.getString("current-mac","").equals("")){
+                Toast.makeText(SocketInfoActivity.this,"请先建立连接并通讯",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            request.setMac(preferences.getString("current-mac",""));
+            request.setName(preferences.getString("current-netName",""));
+            request.setGateway(preferences.getString("current-gateway",""));
+            request.setCode("0004");
+            List<SocketBean> data = new ArrayList<SocketBean>();
+            for(SocketEntity s:sockets){
+                SocketBean sb = new SocketBean();
+                sb.setName(s.getName());
+                sb.setIeee("0x"+transfer(s.getSerialNumber()));
+                if(s.getType().equals("10")){
+                    sb.setDeviceid(1001);
+                }
+                if(s.getType().equals("16")){
+                    sb.setDeviceid(1002);
+                }
+                sb.setDisplay(s.getId());
+
+
+                data.add(sb);
+            }
+            request.setData(data);
+            Log.i("xiafa",request.toString());
+            requestService.dispatchSocketRequest(ctx, request, "gateway");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            BaseResponse response = ChannelBean.getBaseResponse();
+            Log.i("xiafa",response.toString());
+            if(response.getResult()==1){
+                Toast.makeText(SocketInfoActivity.this,"下发成功",Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(SocketInfoActivity.this,"下发失败",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            //List<IndexEntity> indexs = new ArrayList<IndexEntity>();
+            try {
+
+
+
+                //写入collection-netEntites
+                NetEntity netEntity = new NetEntity();
+                netEntity.setSockets(sockets);
+                netEntity.setName(preferences.getString("current-netName", ""));
+                netEntity.setWifi(preferences.getString("current-wifiName", ""));
+                netEntity.setMac(preferences.getString("current-mac", ""));
+                String netsJsonArray = preferences.getString("collection-netEntities", "");
+                if(netsJsonArray.equals("")){
+                    List<NetEntity> netEntities = new ArrayList<NetEntity>();
+                    netEntities.add(netEntity);
+                    String newNetsJsonArray = gson.toJson(netEntities);
+                    editor.putString("collection-netEntities",newNetsJsonArray);
+                }else{
+                    List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netsJsonArray);
+                    netEntities.add(netEntity);
+                    String newNetsJsonArray = gson.toJson(netEntities);
+                    editor.putString("collection-netEntities",newNetsJsonArray);
+                }
+                editor.commit();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Intent intent = new Intent(SocketInfoActivity.this,LoginActivity.class);
+            startActivity(intent);
+            JPushInterface.setAliasAndTags(SocketInfoActivity.this,"test",null);
 
         }
 
