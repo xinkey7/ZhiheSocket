@@ -1,15 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
+    compileSdkVersion 26
     buildToolsVersion '25.0.0'
 
     defaultConfig {
-        applicationId "com.example.tecpie.jiaju"
+        applicationId "com.example.tecpie.ZhiheSocket"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -27,15 +28,23 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/android-support-v4.jar')
     compile files('libs/DelanSDK.jar')
     compile files('libs/jpush-android-2.1.7.jar')
     compile files('libs/ProtocolSDK.jar')
+    compile files('libs/async-http-client-1.7.24.jar')
+    compile files('libs/java_websocket.jar')
+    compile files('libs/json-20140107.jar')
+    compile files('libs/signalr-client-sdk.jar')
+    compile files('libs/slf4j-api-1.7.13.jar')
+    compile files('libs/slf4j-simple-1.7.13.jar')
     compile files('libs/zxing.jar')
+    compile files('libs/netty-all-4.0.45.Final.jar')
     compile 'org.xutils:xutils:3.3.36'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.android.support:support-v4:24.1.1'
-    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.google.code.gson:gson:2.3'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.0'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:design:26.+'
     testCompile 'junit:junit:4.12'
 }

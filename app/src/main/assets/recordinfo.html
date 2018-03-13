@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+
+
+
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+    <script src='js/jquery-ui.js'></script>
+    <script src="js/prefixfree.min.js"></script>
+    <script src="js/index.js"></script>
+    <style>
+	table{
+border: 1px solid #F1F1F1;
+border-radius:4px; /*圆角设置属性*/
+
+overflow:hidden;
+
+border-top-left-radius:1em;
+border-top-right-radius:1em;
+border-bottom-right-radius:1em;
+border-bottom-left-radius:1em;
+}
+        .ui-datepicker-calendar{
+        background:#fff;
+
+        }
+        .ui-datepicker-header {
+        margin-bottom: 0px;
+        }
+
+        .tbutton {
+        background:#1BBC9B;
+        color:#fff;
+        width:100%;
+        height:44px;
+        margin-bottom:10px;
+        border-radius:4px}
+
+        .searchbutton {
+        background:#1BBC9B;
+        color:#fff;
+        width:100%;
+        height:40px;
+        margin-bottom:10px;
+         border-radius:4px}
+
+         .searchbutton {
+		  position: absolute;
+		  left:120px;
+		  top: 60px;
+		}
+
+        .nbutton {
+        background:#FFFFFF;
+        border:1px solid #1BBC9B;
+        color:#1BBC9B;
+        width:100%;
+        height:44px;
+        margin-bottom:10px}
+
+         #handon {
+		  border-radius:4px;
+
+		}
+         #upload {
+		  border-radius:4px;
+
+		}
+        #box_relative {
+		  position: fixed;
+		  top: 504px;
+		}
+		.alarmul {
+        height:40px
+        }
+
+		.alarmli {
+        height:40px
+        }
+        .tinput{
+        border-radius: 4px 4px 4px 4px;
+            width: 200px;
+    height: 40px;
+    border: 1px solid #D6D6D6;
+    padding-left: 1em;
+    padding-right: 1em;
+        box-sizing: border-box;
+
+        }
+
+
+    </style>
+</head>
+<body>
+<nav id="navbar">
+    <img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+    <h1  class="title"><span style="margin-left:-20px">插座信息</span></h1>
+    <img onclick="netinfo()" style="float:right;margin-top:-34px;margin-right:6px;opacity:0.4;filter:alpha(opacity=40);" height="20" width="20" alt="" src="img/icon-about.png">
+</nav>
+
+<main id="main" >
+    <div id="foo" hidden></div>
+
+    <ul id="hlist" class="record-list" >
+        <div style="height:70px;border-bottom:1px solid #D6D6D6">
+            <!--
+            <p style="margin-top:10px;margin-left:20px;">开始时间: <input class="tinput" type="text" id="datepickerstart"></p>
+            <p style="margin-top:10px;margin-left:20px;">结束时间: <input class="tinput" type="text" id="datepickerend"></p>
+            !-->
+            <button class="searchbutton" style ="width:130px;" type="button" id="add">添加插座</button>
+        </div>
+        <div class="section-bd">
+            <table class="device-table" style="margin-left:6px;margin-top:10px;width:96%;background:#fff">
+                <thead>
+                <tr  style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">序号</span></td>
+                    <td ><span  style="margin-left:0px;">别名</span></td>
+                    <td ><span  style="margin-left:0px;">序列号</span></td>
+
+                    <td  ><span  style="margin-left:0px;">mac地址</span></td>
+                    <td  ><span  style="margin-left:0px;">状态</span></td>
+                </tr>
+                </thead>
+                <tbody id="hislist" >
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">1</span></td>
+                    <td ><span  style="margin-left:0px;">1</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span id="name" style="margin-left:0px;">00:01:6C:06:A6:21</span></td>
+                    <td  ><span class="indicator on"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">2</span></td>
+                    <td ><span  style="margin-left:0px;">2</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span id="name2" style="margin-left:0px;">00:01:6C:06:A6:22</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">3</span></td>
+                    <td ><span  style="margin-left:0px;">3</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span id="name3" style="margin-left:0px;">00:01:6C:06:A6:23</span></td>
+                    <td  ><span class="indicator on"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span id="name4" style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+                <tr onclick="detail()" style="height:40px;border-top:1px solid #DDDDDD;
+					border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">4</span></td>
+                    <td ><span  style="margin-left:0px;">*91abcd</span></td>
+
+                    <td  ><span  style="margin-left:0px;">00:01:6C:06:A6:24</span></td>
+                    <td  ><span class="indicator off"></span></td>
+                </tr>
+
+
+
+
+
+
+
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </ul>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+
+
+
+
+</main>
+<section  class="section-addDevice">
+    <div>
+        <!--<button class="tbutton" style ="width:100px;margin-left:83px" type="button" id="handon">下发</button>
+        <button class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="upload">获取</button>-->
+    </div>
+    <div>
+       <button  class="tbutton" style ="width:100px;margin-left:14px" type="button" id="handon">下发</button>
+        <button  class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="upload">获取</button>
+        <button class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="save">备份</button>
+    </div>
+
+</section>
+<script src="js/spin.js"></script>
+<script>
+
+getDefault();
+function getDefault(){
+$('#hislist').empty();
+var str = window.socketInfo.getTitleSockets();
+if(str!=""){
+var list=eval("("+str+")");
+
+	for(var i=0;i<list.length;i++){
+			var sn ="*"+list[i].serialNumber.slice(-6);
+			var index=list[i].id;
+			var tr;
+			if(list[i].state==0){
+			tr = '<tr onclick="detail('+index+')" style="height:40px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;">'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].id+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
+
+                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span  style="margin-left:0px;">未入网</span></td>'+
+                '</tr>';
+			}
+			if(list[i].state==1){
+			tr = '<tr onclick="detail('+index+')" style="height:40px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;">'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].id+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
+
+                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span class="indicator on"></td>'+
+                '</tr>';
+			}
+			if(list[i].state==2){
+			tr = '<tr onclick="detail('+index+')" style="height:40px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;">'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].id+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
+                    '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
+
+                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span class="indicator off"></td>'+
+                '</tr>';
+			}
+
+
+
+			$('#hislist').append(tr);
+
+
+	}
+
+}
+
+}
+
+
+function back(){
+ window.socketInfo.back();
+}
+
+function detail(id){
+//window.socketInfo.toast(id);
+	window.socketInfo.detail(id);
+	}
+
+function netinfo(){
+	window.socketInfo.netinfo();
+}
+
+$('#save').on('click',function(){
+		window.socketInfo.save();
+	});
+
+	$('#open').on('click',function(){
+		window.socketInfo.open();
+	});
+	$('#close').on('click',function(){
+		window.socketInfo.close();
+	});
+	$('#upload').click(function(){
+    window.socketInfo.upload();
+
+	});
+
+
+
+
+
+
+	$('#add').click(function(){
+    window.socketInfo.add();
+
+
+
+	});
+    </script>
+
+</body>
+</html>

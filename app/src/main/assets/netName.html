@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav id="navbar">
+	<img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+	<h1  class="title"><span style="margin-left:-20px">命名</span></h1>
+	<img onclick="netinfo()" style="float:right;margin-top:-34px;margin-right:6px;opacity:0.4;filter:alpha(opacity=40);" height="20" width="20" alt="" src="img/icon-about.png">
+</nav>
+
+<main id="main">
+	<form class="loginform">
+		<!--<div class="logo"><img  src="img/se_university.png"  alt="国家电网公司"></div>-->
+
+		<div class="field-group">
+			<div class="field">
+				<input type="text"  id="wifiName">
+			</div>
+			<div class="field">
+				<input type="text" placeholder="请为当前网关命名" id="netName"  >
+				<!--<span class="eye-toggle"></span>-->
+			</div>
+
+		</div>
+
+		<button type="button" id="next">下一步</button>
+
+		<!--<a href="#" class="problem-link">登录遇到问题</a>-->
+		<!--<a href="#" class="register-link">新用户注册</a>-->
+
+
+
+	</form>
+
+</main>
+<div id="win">
+</div>
+
+<script>
+/*
+var pwd = document.getElementById("pwd");
+document.querySelector(".eye-toggle").onclick = function() {
+	pwd.type = pwd.type == "password" ? "text" : "password";
+};*/
+getSSID();
+getNetName();
+function getSSID(){
+var name = window.net.getSSID();
+$('#wifiName').val(name);
+$('#wifiName').attr("disabled",true)
+}
+function getNetName(){
+var name = window.net.getName();
+	if(name!=""){
+		$('#netName').val(name);
+	}
+}
+function back(){
+ window.net.back();
+}
+$('#next').click(function(){
+
+	var wifiName = $('#wifiName').val();
+	var netName = $('#netName').val();
+	if($('#netName')[0].value==''){
+		window.net.toast("命名不能为空");
+		return;
+	}
+	if(/.*[\u4e00-\u9fa5]+.*$/.test($('#netName')[0].value)){
+		window.net.toast("请勿输入中文");
+		return;
+	}
+
+	window.net.next(wifiName,netName);
+});
+
+function netinfo(){
+	window.net.netinfo();
+}
+
+</script>
+</body>
+</html>

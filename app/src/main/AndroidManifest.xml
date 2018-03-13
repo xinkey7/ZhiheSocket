@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.tecpie.jiaju">
+    package="com.example.tecpie.ZhiheSocket">
 
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
@@ -18,14 +18,19 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 闪光灯 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
+    <!-- 多媒体相关 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    app
     <application
-        android:name=".Jiajuapp"
+        android:name=".ZhiheSocketapp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="ZhiheSocket"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Light.NoTitleBar">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,13 +39,23 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.MainActivity" />
+        <activity android:name=".zxing.app.CaptureActivity" />
+        <activity android:name=".zxing.app.PreferencesActivity" />
+        <activity android:name=".activity.NetNameActivity" />
+        <activity android:name=".activity.SocketManageActivity" />
+        <activity android:name=".activity.AddActivity" />
+        <activity android:name=".activity.ModifyActivity" />
+        <activity android:name=".activity.SocketInfoActivity" />
+        <activity android:name=".activity.SocketDetailActivity" />
+        <activity android:name=".activity.NetDetailActivity" />
+
         <activity android:name=".activity.ControlActivity" />
-        <activity android:name=".activity.FsControlActivity" />
+        <activity android:name=".activity.DMonEntrieActivity" />
         <activity android:name=".activity.TcControlActivity" />
         <activity android:name=".activity.SceneActivity" />
         <activity android:name=".activity.AutomationActivity" />
         <activity android:name=".activity.DlActivity" />
-        <activity android:name=".activity.FhActivity" />
+        <activity android:name=".activity.DetailActivity" />
         <activity android:name=".activity.ConfigActivity" />
         <!-- Begin Jpush -->
         <service
@@ -125,7 +140,12 @@
             android:name="JPUSH_APPKEY"
             android:value="dd783890f705ac9fb2c09c69" />
         <!-- End Jpush -->
-        <activity android:name=".DeviceAddActivity"></activity>
+        <activity android:name=".activity.DeviceAddActivity" />
+        <activity android:name=".activity.DeviceInfoActivity" />
+        <activity
+            android:name=".activity.FileListActivity"
+            android:label="@string/title_activity_file_list"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

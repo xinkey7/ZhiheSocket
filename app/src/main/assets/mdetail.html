@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/esl.js"></script>
+	<style>
+		 .tbutton {
+        background:#1BBC9B;
+        color:#fff;
+        width:100%;
+        height:44px;
+        margin-bottom:10px;
+        border-radius:4px
+        }
+	</style>
+    
+</head>
+<body>
+<nav id="navbar">
+	<img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+	<h1  class="title"><span style="margin-left:-20px">监控点信息</span></h1>
+
+
+</nav>
+
+<main id="main"><section class="section section-devices">
+        <div class="section-bd">
+            <table class="device-table">
+                <thead style="border-bottom:1px solid #DDDDDD;font-size:14px;">
+                
+                              
+                </thead>
+                <tbody id="tlist">
+                	<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">监控点名称：</span></td>
+							
+							<td  ><span id="name" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+					<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+						<td ><span  style="margin-left:-20px;">当前值：</span></td>
+
+						<td  ><input id="val" style="text-align:center;margin-left:0px;color:#6666FF;"></td>
+					</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">站号：</span></td>
+							
+							<td ><span  id="stationNo" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">数据类型：</span></td>
+							
+							<td ><span id="dataType" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">主地址值：</span></td>
+							
+							<td ><span id="mainAddr" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">子地址值：</span></td>
+							
+							<td ><span  id="subAddr"  style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">读写权限：</span></td>
+							
+							<td ><span  id="privilege" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">监控点描述：</span></td>
+							
+							<td ><span  id="desc" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+	<section  class="section-addDevice">
+		<div>
+			<!--<button class="tbutton" style ="width:100px;margin-left:83px" type="button" id="current">修改</button>-->
+			<button class="tbutton"  style ="width:100px;margin-left:130px" type="button" id="update">修改值</button>
+		</div>
+
+	</section>
+    
+</main>
+<script>
+      
+
+     
+
+function back(){
+ window.mdetail.back();
+}
+
+
+getDefault();
+function getDefault(){
+var val = window.mdetail.val();
+$('#val')[0].value=val;
+
+var str = window.mdetail.getDetails();
+
+
+
+
+	var detail=eval("("+str+")");
+
+	$('#name').text(detail.name);
+	$('#stationNo').text(detail.stationNo);
+	var dataTypeStr;
+	if(detail.dataType==0){
+	dataTypeStr ="位类型（Bit）";
+	}
+	if(detail.dataType==1){
+	dataTypeStr ="16 位无符号类型";
+	}
+	if(detail.dataType==2){
+	dataTypeStr ="16 位有符号类型";
+	}
+	if(detail.dataType==3){
+	dataTypeStr ="16 位 BCD 类型 ";
+	}
+	if(detail.dataType==4){
+	dataTypeStr ="16 位 16 进制类型";
+	}
+	if(detail.dataType==5){
+	dataTypeStr ="16 位二进制类型";
+	}
+	if(detail.dataType==11){
+	dataTypeStr ="32 位无符号类型";
+	}
+	if(detail.dataType==12){
+	dataTypeStr ="32 位有符号类型";
+	}
+	if(detail.dataType==13){
+	dataTypeStr ="32 位 BCD 类型";
+	}
+	if(detail.dataType==14){
+	dataTypeStr ="32 位 16 进制类型";
+	}
+	if(detail.dataType==15){
+	dataTypeStr ="32 位二进制类型";
+	}
+	if(detail.dataType==16){
+	dataTypeStr ="单精度类型 ";
+	}
+	if(detail.dataType==30){
+	dataTypeStr ="字符串类型 ";
+	}
+	$('#dataType').text(dataTypeStr);
+	$('#mainAddr').text(detail.mainAddr);
+	$('#subAddr').text(detail.subAddr);
+	if(detail.privilege==4){
+	$('#privilege').text("只读");
+	}
+	if(detail.privilege==6){
+	$('#privilege').text("可读可写");
+	}
+
+	$('#desc').text(detail.desc);
+
+
+
+
+}
+
+$('#update').click(function(){
+	var name = $('#name').text();
+	var val = $('#val').val();
+
+
+	window.mdetail.update(name,val);
+});
+
+
+
+
+
+     
+</script>
+</body>
+</html>

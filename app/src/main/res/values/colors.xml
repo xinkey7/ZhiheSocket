@@ -9,4 +9,82 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="bottom_txt_color">#333</color>
+    <color name="white">#ffffffff</color>
+    <color name="line_color">#E6E6E6</color>
+
+    <color name="black">#ff000000</color>
+    <color name="blue">#ff75a6ff</color>
+    <color name="red">#E1423C</color>
+    <color name="translucence">#506050</color>
+    <color name="bg_gray">#e2e2e2</color>
+    <color name="green">#65e17b</color>
+    <color name="transparent">#00000000</color>
+    <color name="clear">#00000000</color>
+    <drawable name="translucent_background">#60000000</drawable>
+    <drawable name="transparent_background">#00000000</drawable>
+
+    <color name="blue_text">#5EC2E3</color>
+    <color name="dark_text">#686868</color>
+
+
+    <color name="gray">#ffcccccc</color>
+    <color name="light">#ffdedede</color>
+    <color name="light_gray">#fff5f5f5</color>
+    <color name="light_blue">#ff3c86c5</color>
+    <color name="one_line_layout_color">#C2C3C4</color>
+    <color name="round_corner_line_color">#E6E6E6</color>
+
+    <color name="app_color">#01A796</color>
+    <color name="light_app_color">#d2f4f3</color>
+    <color name="section_app_color">#4acec3</color>
+    <color name="nav_bg_color">#2A3B45</color>
+    <color name="menu_line_color">#ffededed</color>
+    <color name="content_bg_color">#ffeeeeee</color>
+    <color name="content_border_color">#ffdddddd</color>
+
+    <color name="carrental_dark2">#ffd7d7d7</color>
+    <color name="common_green">#ff57c3d0</color>
+    <color name="wifi_connected_green">#4EEE94</color>
+    <color name="dark">#ff242424</color>
+    <color name="dialog_item_bg">#ffdddddd</color>
+    <color name="back_pressed_false">#38BEC9</color>
+    <color name="back_pressed_true">#38BEC9</color>
+    <color name="divider_line_color">#ffe1e1e1</color>
+
+    <color name="bg_color">#ffEFEFEF</color>
+    <color name="app_activity_title_color">#ffEFEFEF</color>
+    <color name="app_other_title_color">#ffEFEFEF</color>
+    <color name="app_content_color">#ffEFEFEF</color>
+    <color name="app_edit_content_color">#ffEFEFEF</color>
+    <color name="app_item_content_color">#ffEFEFEF</color>
+    <color name="app_item_desc_color">#ffEFEFEF</color>
+    <color name="app_bottom_gray">#ffdddddd</color>
+    <color name="app_bottom_blue">#ff25B8F1</color>
+
+    <color name="app_content_black">#ff000000</color>
+    <color name="app_content_white">#ffffffff</color>
+    <color name="app_content_light">#ff222222</color>
+    <color name="contact_section_color">#FFF0F1F6</color>
+    <color name="section_txt_color">#FF9B9B9B</color>
+
+    <color name="content_black_color">#202020</color>
+
+
+    <color name="btn_white_normal">#f7f8f8</color>
+    <color name="btn_white_pressed">#b5b5b6</color>
+    <color name="btn_green_noraml">#68C270</color>
+    <color name="btn_green_pressed">#6FCD78</color>
+    <color name="btn_gray_normal">#c0c0c0</color>
+    <color name="btn_gray_pressed_status">#b5b5b6</color>
+    <color name="btn_gray_pressed">#666667</color>
+    <color name="btn_blue_normal">#1e90ff</color>
+    <color name="btn_blue_pressed">#0066FF</color>
+
+    <color name="act_background">#efefef</color>
+    <color name="watermark_hint">#ccffffff</color>
+    <color name="gary">#898989</color>
+    <color name="gray_lite">#c5c5c5</color>
+    <color name="phone_bg">#f6f6f6</color>
+    <color name="itemlist">#f4f4f4</color>
 </resources>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/esl.js"></script>
+    
+</head>
+<body>
+<nav id="navbar">
+    <h1 class="title">监控组</h1>
+    <!--<span class="location">苏州</span>-->
+</nav>
+
+<main id="main">
+    <div id="foo" hidden></div>
+    <section class="section section-devices">
+        <div class="section-bd">
+            <table class="device-table">
+                <thead style="border-bottom:1px solid #DDDDDD;font-size:14px;">
+                              
+                </thead>
+                <tbody id="tlist">
+                
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+</main>
+<script src="js/spin.js"></script>
+<script>
+
+
+var opts = {
+  lines: 13 // The number of lines to draw
+, length: 7 // The length of each line
+, width: 7 // The line thickness
+, radius: 20 // The radius of the inner circle
+, scale: 1 // Scales overall size of the spinner
+, corners: 1 // Corner roundness (0..1)
+, color: '#000' // #rgb or #rrggbb or array of colors
+, opacity: 0.25 // Opacity of the lines
+, rotate: 0 // The rotation offset
+, direction: 1 // 1: clockwise, -1: counterclockwise
+, speed: 1 // Rounds per second
+, trail: 60 // Afterglow percentage
+, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+, zIndex: 2e9 // The z-index (defaults to 2000000000)
+, className: 'spinner' // The CSS class to assign to the spinner
+, top: '50%' // Top position relative to parent
+, left: '50%' // Left position relative to parent
+, shadow: false // Whether to render a shadow
+, hwaccel: false // Whether to use hardware acceleration
+, position: 'absolute' // Element positioning
+}
+var target = document.getElementById('foo');
+var spinner = new Spinner(opts).spin(target);
+
+$('#foo').show();
+setTimeout("getDefault()",500);
+     
+
+
+
+
+
+
+function getDefault(){
+
+    var str = window.index.getGroups();
+	var list=eval("("+str+")");
+	console.log(list);
+	$('#tlist').empty();
+	for(var i=0;i<list.length;i++){
+
+			var tr = '<tr onclick="show(this)" name="'+list[i].name+'"  index="'+i+'" style="height:50px;border-bottom:1px solid #DDDDDD;font-size:16px;" id="groups" deviceType="1"   >'+
+
+							'<td ><span  style="margin-left:-60px;">'+list[i].name+'</span></td>'+
+							
+							'<td >'+'<img style="margin-right:-40px;margin-top:10px;" height="20" width="20" src="img/rightArrow.png"  alt="">'+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		
+		
+	}
+	$('#foo').hide();
+
+
+}
+
+function show(obj){
+var i = $(obj).attr("index");
+var name = $(obj).attr("name");
+window.index.showDetail(i,name);
+console.log("   "+i);
+}
+
+
+     
+</script>
+</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/esl.js"></script>
+	<style>
+		 .tbutton {
+        background:#1BBC9B;
+        color:#fff;
+        width:100%;
+        height:44px;
+        margin-bottom:10px;
+        border-radius:4px
+        }
+	</style>
+    
+</head>
+<body>
+<nav id="navbar">
+	<img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+
+	<h1 class="title"><span  style="margin-left:-20px">设备信息</span></h1>
+
+</nav>
+
+<main id="main"><section class="section section-devices">
+        <div class="section-bd">
+            <table class="device-table">
+                <thead style="border-bottom:1px solid #DDDDDD;font-size:14px;">
+                
+                              
+                </thead>
+                <tbody id="tlist">
+                	<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">设备别名：</span></td>
+							
+							<td  ><span id="alias" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">盒子类型：</span></td>
+							
+							<td ><span  id="boxType" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">盒子状态：</span></td>
+							
+							<td ><span id="connectionState" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">ip：</span></td>
+							
+							<td ><span id="ip" style="margin-left:0px;color:#6666FF;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">子网掩码：</span></td>
+							
+							<td ><span  id="subnetMask"  style="margin-left:0px;color:#6666FF;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">网关：</span></td>
+							
+							<td ><span  id="gateway" style="margin-left:0px;color:#6666FF;">六开关开开关开关开关</span></td>
+				</tr>
+				<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+							<td ><span  style="margin-left:-20px;">DNS1：</span></td>
+							
+							<td ><span  id="primaryDns" style="margin-left:0px;">六开关开开关开关开关</span></td>
+				</tr>
+					<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+						<td ><span  style="margin-left:-20px;">DNS2：</span></td>
+
+						<td ><span  id="secondaryDns" style="margin-left:0px;">六开关开开关开关开关</span></td>
+					</tr>
+					<tr  style="height:50px;border-bottom:1px solid #DDDDDD;font-size:14px;"    >
+
+						<td ><span  style="margin-left:-20px;">当前网络类型：</span></td>
+
+						<td ><span  id="allowedNetworkTypes" style="margin-left:0px;">六开关开开关开关开关</span></td>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    
+</main>
+<script>
+      
+
+     
+function back(){
+ window.deviceInfo.back();
+}
+
+
+
+getDefault();
+function getDefault(){
+
+var str = window.deviceInfo.getDetails();
+
+
+ 
+
+	var detail=eval("("+str+")");
+
+	$('#alias').text(detail.alias);
+	if(detail.boxType==0){
+	$('#boxType').text("标准盒子");
+	}
+	if(detail.boxType==1){
+	$('#boxType').text("mini盒子");
+	}
+	if(detail.connectionState==0){
+	$('#connectionState').text("未知");
+	}
+	if(detail.connectionState==1){
+	$('#connectionState').text("已经连接");
+	}
+	if(detail.connectionState==2){
+	$('#connectionState').text("超时");
+	}
+	if(detail.connectionState==3){
+	$('#connectionState').text("已断开");
+	}
+	$('#ip').text(detail.ip);
+	$('#subnetMask').text(detail.subnetMask);
+	$('#gateway').text(detail.gateway);
+	$('#primaryDns').text(detail.primaryDns);
+	$('#secondaryDns').text(detail.secondaryDns);
+
+	if(detail.allowedNetworkTypes==1){
+	$('#allowedNetworkTypes').text("以太网");
+	}
+	if(detail.allowedNetworkTypes==2){
+	$('#allowedNetworkTypes').text("2G");
+	}
+	if(detail.allowedNetworkTypes==3){
+	$('#allowedNetworkTypes').text("3G");
+	}
+	if(detail.allowedNetworkTypes==4){
+	$('#allowedNetworkTypes').text("WIFI");
+	}
+	if(detail.allowedNetworkTypes==5){
+	$('#allowedNetworkTypes').text("4G");
+	}
+
+
+	
+	
+
+
+}
+
+
+
+
+
+     
+</script>
+</body>
+</html>

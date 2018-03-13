@@ -9,43 +9,81 @@
 </head>
 <body>
 <nav id="navbar">
-	<h1 class="title">消息</h1>
+	<h1 class="title">历史记录</h1>
 	<!--<span class="location">苏州</span>-->
 </nav>
 
 <main id="main">
-	<ul class="message-list">
+	<ul id="hislist" class="message-list">
 		<li>
-			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="avatar"><img style="height:80%;margin-top:4px" src="img/hislog.png" alt=""></div>
 			<div class="body">
-				<h5 class="name">无锡智合</h5>
-				<span class="date">14:29</span>
-				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+				<h5 class="name">历史记录条目</h5>
+				<span class="date">采集周期（秒）:7</span>
+				<p class="message">描述内容：消息描述，描述描述描述描述描述描述</p>
 			</div>
 		</li>
 		<li>
-			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="avatar"><img style="height:80%;margin-top:4px" src="img/hislog.png" alt=""></div>
 			<div class="body">
-				<h5 class="name">无锡智合</h5>
-				<span class="date">14:29</span>
-				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+				<h5 class="name">历史记录条目</h5>
+				<span class="date">采集周期（秒）:7</span>
+				<p class="message">描述内容：消息描述，描述描述描述描述描述描述</p>
 			</div>
 		</li>
 		<li>
-			<div class="avatar"><img src="img/net.jpg" alt=""></div>
+			<div class="avatar"><img style="height:80%;margin-top:4px" src="img/hislog.png" alt=""></div>
 			<div class="body">
-				<h5 class="name">无锡智合</h5>
-				<span class="date">14:29</span>
-				<p class="message">感谢您节省10w电量，获得50元补贴!</p>
+				<h5 class="name">历史记录条目</h5>
+				<span class="date">采集周期（秒）:7</span>
+				<p class="message">描述内容：消息描述，描述描述描述描述描述描述</p>
 			</div>
 		</li>
+		<li>
+			<div class="avatar"><img style="height:80%;margin-top:4px" src="img/hislog.png" alt=""></div>
+			<div class="body">
+				<h5 class="name">历史记录条目</h5>
+				<span class="date">采集周期（秒）:7</span>
+				<p class="message">描述内容：消息描述，描述描述描述描述描述描述</p>
+			</div>
+		</li>
+
 	</ul>
 </main>
 </body>
 <script type="text/javascript">
+	/*
 	loadMessage();
+
 	function loadMessage(){
 		$(".message-list").append(window.message.loadMessage());
 	}
+	*/
+	getDefault();
+function getDefault(){
+var str = window.message.getMessage();
+
+	var tlist=eval("("+str+")");
+	var list = tlist.MessageShowBeanList;
+	console.log(list);
+	$('#hislist').empty();
+	for(var i=0;i<list.length;i++){
+
+			var li = '<li   >'+
+			                '<div class="avatar"><img style="height:80%;margin-top:4px" src="img/hislog.png" alt=""></div>'+
+			                  '<div class="body">' +
+                                 '<h5 class="name">'+list[i].name+'</h5>'+
+							'<span class="date">'+'采集周期（秒）:'+list[i].period+'</span>'+
+							'<p class="message">'+'描述内容:'+list[i].desc+'</p>'+
+
+							'</div>'+
+
+						'</li>';
+			$('#hislist').append(li);
+	}
+
+
+
+}
 </script>
 </html>

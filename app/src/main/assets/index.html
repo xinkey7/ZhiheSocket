@@ -8,34 +8,33 @@
     <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script src="./echarts/esl.js"></script>
+    <style type="text/css">
+    img
+		{
+		opacity:0.4;
+		filter:alpha(opacity=40); /* 针对 IE8 以及更早的版本 */
+		}
+    </style>
 </head>
 <body>
 <nav id="navbar">
-    <h1 class="title">首页</h1>
+    <img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+    <h1  class="title"><span id="groupName" style="margin-left:-20px">默认组</span></h1>
     <!--<span class="location">苏州</span>-->
 </nav>
 
 <main id="main">
-    <section class="section section-top section-income">
-        <div class="yesterday">
-            <span>今日收益（元）</span>
-            <strong id="profit_today">¥5.34</strong>
-        </div>
-
-        <div class="total">
-            <span>总收益（元）</span>
-            <strong id="profit_total">¥56.78</strong>
-        </div>
-    </section>
+    <div id="foo" hidden></div>
 
     <section class="section section-devices">
         <div class="section-bd">
             <table class="device-table">
-                <thead>
-                <th class="col-device">设备列表</th>
-                <th>设备</th>
-                <th>状态</th>
-                <th class="col-power">功率（W）</th>
+                <thead style="border-bottom:1px solid #DDDDDD;font-size:14px;">
+                <!--<th class="col-device">设备列表</th>-->
+                <th>名称</th>
+                <th style="padding:0">状态</th>
+                <th style="width:40px" class="col-power">数值</th>
+                <th></th>
                 </thead>
                 <tbody id="tlist">
                 <!-- <tr id="kongtiao">
@@ -52,121 +51,90 @@
             </table>
         </div>
     </section>
-    <form class="loginform">
-    <section class="section-addDevice">
-        <div>
-            <button type="button" id="add">增加新设备</button>
-        </div>
-    </section>
-    </form>
+
 </main>
+<script src="js/spin.js"></script>
 <script>
-      <!--var show="line";-->
-      <!--var  myChart=null;-->
-      <!--var  myChart2=null;-->
-      <!--require.config({-->
-        <!--paths: {-->
-            <!--echarts:'./echarts/echarts',-->
-            <!--'echarts/chart/bar':'./echarts/chart/bar',-->
-            <!--'echarts/chart/line':'./echarts/chart/line'-->
-        <!--}-->
-      <!--});-->
-      <!--var dataStr=  window.index.getLoad();-->
-		<!--var json= $.parseJSON(dataStr);-->
-		<!--var labels=json.label;-->
-		<!--var datas=json.data;-->
 
-		<!--var dataStrBar=  window.index.getElectricity();-->
-		<!--var jsonBar= $.parseJSON(dataStrBar);-->
-		<!--var barlabels=jsonBar.label;-->
-		<!--var bardatas=jsonBar.data;-->
-
-     <!--require(['echarts','echarts/chart/bar','echarts/chart/line'],function(ec) {-->
-            <!--myChart=ec.init(document.getElementById('lineChart'));-->
-
-            <!--option = {-->
-                <!--calculable : false,-->
-                <!--title:{-->
-                    <!--text:'今日负荷',-->
-                    <!--x: 'center',-->
-                    <!--y: 'top'-->
-                <!--},-->
-                <!--grid:{x:55,y:30,x2:20,y2:20},-->
-                <!--xAxis : [-->
-                    <!--{-->
-                        <!--type : 'category',-->
-                        <!--boundaryGap : false,-->
-                        <!--data : labels-->
-                    <!--}-->
-                <!--],-->
-                <!--yAxis : [-->
-                    <!--{-->
-                        <!--type : 'value',-->
-                        <!--axisLabel : {-->
-                            <!--formatter: '{value} kW'-->
-                        <!--}-->
-                    <!--}-->
-                <!--],-->
-                <!--series : [-->
-                    <!--{-->
-                        <!--name:'',-->
-                        <!--type:'line',-->
-                        <!--data:datas-->
-                    <!--}-->
-                <!--]-->
-            <!--};-->
-            <!--myChart.setOption(option);-->
+var opts = {
+  lines: 13 // The number of lines to draw
+, length: 7 // The length of each line
+, width: 7 // The line thickness
+, radius: 20 // The radius of the inner circle
+, scale: 1 // Scales overall size of the spinner
+, corners: 1 // Corner roundness (0..1)
+, color: '#000' // #rgb or #rrggbb or array of colors
+, opacity: 0.25 // Opacity of the lines
+, rotate: 0 // The rotation offset
+, direction: 1 // 1: clockwise, -1: counterclockwise
+, speed: 1 // Rounds per second
+, trail: 60 // Afterglow percentage
+, fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+, zIndex: 2e9 // The z-index (defaults to 2000000000)
+, className: 'spinner' // The CSS class to assign to the spinner
+, top: '50%' // Top position relative to parent
+, left: '50%' // Left position relative to parent
+, shadow: false // Whether to render a shadow
+, hwaccel: false // Whether to use hardware acceleration
+, position: 'absolute' // Element positioning
+}
+var target = document.getElementById('foo');
+var spinner = new Spinner(opts).spin(target);
 
 
-           <!--myChart2=ec.init(document.getElementById('barChart'));-->
+function back(){
+ window.entrieindex.back();
+}
+$('#groupName').empty();
+var groupName = window.entrieindex.getGroupName();
+$('#groupName').append(groupName);
+$('#foo').show();
+setTimeout("getDefault()",500);
 
-           <!--var option2= {-->
-            <!--title:{-->
-                <!--text:'今日用电量',-->
-                <!--x: 'center',-->
-                <!--y: 'top'-->
-            <!--},-->
-            <!--grid: {-->
-                <!--x: 50,-->
-                <!--y: 45,-->
-                <!--x2:'2%',-->
-                <!--y2:40-->
-            <!--},-->
-            <!--xAxis : [-->
-                <!--{-->
-                    <!--type : 'category',-->
-                    <!--data :barlabels,-->
-                    <!--"axisLabel":{-->
-                        <!--interval: 3-->
-                    <!--}-->
-                <!--}-->
-            <!--],-->
-            <!--yAxis : [-->
-                <!--{-->
-                    <!--type : 'value',-->
-                    <!--show: true,-->
-                    <!--axisLabel : {-->
-                            <!--formatter: '{value} kWh'-->
-                    <!--}-->
-                <!--}-->
-            <!--],-->
-            <!--series : [-->
-                <!--{-->
-                    <!--name:'直接访问',-->
-                    <!--type:'bar',-->
-                    <!--itemStyle : { normal: {label : {show: false, position:'top'}}},-->
-                    <!--data:bardatas-->
-                <!--}-->
-            <!--]-->
-        <!--};-->
-        <!--myChart2.setOption(option2);-->
-        <!--});-->
 
-$('#add').click(function(){
+function getDefault(){
 
-	window.index.add();
-});
+var str = window.entrieindex.getDMonEntries();
+	var list=eval("("+str+")");
+	console.log(list);
+	for(var i=0;i<list.length;i++){
+		if(list[i].status == 0){
+			var tr = '<tr onclick="show(this)" val="'+list[i].value+'" name="'+list[i].name+'" style="height:50px;border-bottom:1px solid #DDDDDD;font-size:16px;"   >'+
 
+							'<td style="font-size: 14px;"><span>'+list[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (true?'on':'off') + '"></span></td>'+
+							'<td class="col-power">'+list[i].value+'</td>'+
+							'<td >'+'<img style="margin-top:10px;" height="20" width="20" src="img/icon_menu.png"  alt="">'+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+		if(list[i].status == 2){
+			var tr = '<tr onclick="show(this)" name="'+list[i].name+'" style="height:50px;border-bottom:1px solid #DDDDDD;font-size:16px;"   >'+
+
+							'<td style="font-size: 14px;"><span>'+list[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (false?'on':'off') + '"></span></td>'+
+							'<td class="col-power">'+"超时"+'</td>'+
+							'<td >'+'<img style="margin-top:10px;" height="20" width="20" src="img/icon_menu.png"  alt="">'+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+		if(list[i].status == 3){
+			var tr = '<tr onclick="show(this)"  name="'+list[i].name+'" style="height:50px;border-bottom:1px solid #DDDDDD;font-size:16px;"   >'+
+
+							'<td style="font-size: 14px;"><span>'+list[i].name+'</span></td>'+
+							'<td><span class="indicator ' + (false?'on':'off') + '"></span></td>'+
+							'<td class="col-power">'+"错误"+'</td>'+
+							'<td >'+'<img style="margin-top:10px;" height="20" width="20" src="img/icon_menu.png"  alt="">'+'</td>'+
+						'</tr>';
+			$('#tlist').append(tr);
+		}
+	}
+			$('#foo').hide();
+
+
+
+}
+/*
 	var str = window.index.getDevice();
 	var list = $.parseJSON(str);
 	for(var i=0;i<list.devices.length;i++){
@@ -205,45 +173,15 @@ $('#add').click(function(){
 		window.index.control($(this).attr("deviceId"),"fs",$(this).attr("endpointid"));
 	});
 
-
-      <!--$("#next").click(function(){-->
-            <!--if(show=="line"){-->
-                <!--showBar();-->
-            <!--}else if(show=="bar"){-->
-                <!--showLine();-->
-            <!--}else{-->
-                <!--window.index.toast("出错了!");-->
-            <!--}-->
-      <!--});-->
+*/
 
 
+    function show(obj){
+var name = $(obj).attr("name");
+var val = $(obj).attr("val");
+window.entrieindex.showDetail(name,val);
 
-     <!--showBar();-->
-     <!--function showLine(){-->
-        <!--show="line";-->
-        <!--$("#lineChart").hide();-->
-        <!--$("#barChart").show();-->
-        <!--myChart.resize();-->
-        <!--myChart2.resize();-->
-     <!--}-->
-
-    <!--function showBar(){-->
-        <!--show="bar";-->
-        <!--$("#barChart").hide();-->
-        <!--$("#lineChart").show();-->
-        <!--myChart.resize();-->
-        <!--myChart2.resize();-->
-    <!--}-->
-
-    <!--showProfit();-->
-    <!--function showProfit(){-->
-        <!--var dataStr=  window.index.profit();-->
-		<!--var json= $.parseJSON(dataStr);-->
-		<!--var profit_today=json.profit;-->
-		<!--var profit_total=json.profit_total;-->
-		<!--$("#profit_today").html(profit_today);-->
-		<!--$("#profit_total").html(profit_total);-->
-    <!--}-->
+}
 </script>
 </body>
 </html>

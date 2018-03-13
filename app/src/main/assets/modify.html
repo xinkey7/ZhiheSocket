@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/modernizr.custom.79639.js"></script>
+	<noscript><link rel="stylesheet" type="text/css" href="css/noJS.css" /></noscript>
+	<style>
+	 .scanbutton {
+		  position: absolute;
+		  left:280px;
+		  top: 7px;
+		}
+		</style>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/style2.css">
+
+</head>
+<body>
+<nav id="navbar">
+	<img onclick="back()" style="float:left;margin-top:10px;margin-left:4px" height="20" width="20" alt="" src="img/leftArrow.png">
+	<h1  class="title"><span style="margin-left:-20px">修改插座</span></h1>
+</nav>
+
+<main id="main">
+	<form class="loginform">
+		<!--<div class="logo"><img  src="img/se_university.png"  alt="国家电网公司"></div>-->
+
+		<div class="field-group">
+			<div class="field">
+				<input type="text"  placeholder="序列号（可通过扫码获得）" id="SN" style ="width:240px;margin-top:6px;border-radius:6px;">
+				<button class="scanbutton" type="button" id="scan" style ="width:60px;height:42px;">扫码</button>
+			</div>
+			<div class="field">
+				<input type="text" placeholder="别名" id="name"
+					   style ="margin-top:20px;border-radius:6px;">
+				<!--<span class="eye-toggle"></span>-->
+			</div>
+			<div id="dd" style="width:134px;margin-top:20px;margin-left:0px;background:#1BBC9B;border-radius: 4px;" class="wrapper-dropdown-1" tabindex="1">
+				<span>插座种类</span>
+				<ul  class="dropdown" tabindex="1">
+					<li><a href="#">10</a></li>
+					<li><a href="#">16</a></li>
+				</ul>
+			</div>
+
+
+
+		</div>
+
+
+		<button type="button" id="confirm">确认</button>
+		<button type="button" id="delete">删除此插座</button>
+
+		<!--<a href="#" class="problem-link">登录遇到问题</a>-->
+		<!--<a href="#" class="register-link">新用户注册</a>-->
+
+
+
+	</form>
+
+</main>
+
+<script>
+/*
+var pwd = document.getElementById("pwd");
+document.querySelector(".eye-toggle").onclick = function() {
+	pwd.type = pwd.type == "password" ? "text" : "password";
+};*/
+
+var type="";
+			function DropDown(el) {
+				this.dd = el;
+				this.placeholder = this.dd.children('span');
+				this.opts = this.dd.find('ul.dropdown > li');
+				this.val = '';
+				this.index = -1;
+				this.initEvents();
+			}
+			DropDown.prototype = {
+				initEvents : function() {
+					var obj = this;
+
+					obj.dd.on('click', function(event){
+						$(this).toggleClass('active');
+						return false;
+					});
+
+					obj.opts.on('click',function(){
+						var opt = $(this);
+						obj.val = opt.text();
+						obj.index = opt.index();
+						obj.placeholder.text('插座种类: ' + obj.val+'A');
+						type = obj.val;
+						console.log(type);
+					});
+				},
+				getValue : function() {
+					return this.val;
+				},
+				getIndex : function() {
+					return this.index;
+				}
+			}
+
+			$(function() {
+
+				var dd = new DropDown( $('#dd') );
+
+				$(document).click(function() {
+					// all dropdowns
+					$('.wrapper-dropdown-1').removeClass('active');
+				});
+
+			});
+
+
+
+initValues();
+function initValues(){
+var SN = window.modify.getSN();
+var name = window.modify.getName();
+var type = window.modify.getType();
+$('#SN').val(SN);
+$('#name').val(name);
+}
+setScanSN();
+function setScanSN(){
+var str =  window.modify.getSN();
+if(str!=""){
+$('#SN').val(str);
+}
+}
+
+function back(){
+ window.modify.back();
+}
+
+$('#confirm').click(function(){
+	var SN = $('#SN').val();
+	var name = $('#name').val();
+	if(/.*[\u4e00-\u9fa5]+.*$/.test($('#name')[0].value)){
+		window.modify.toast("请勿输入中文");
+		return;
+	}
+	if((SN=="" || name=="") || type=="" ){
+	 window.modify.toast("请检查信息完整性");
+	}else{
+	window.modify.confirm(SN,name,type);
+	}
+
+	});
+
+$('#delete').click(function(){
+	     window.modify.delete();
+	});
+
+
+$('#scan').click(function(){
+	     window.modify.scan();
+	});
+
+</script>
+</body>
+</html>
