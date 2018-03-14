@@ -43,6 +43,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import cn.jpush.android.api.JPushInterface;
 import io.netty.channel.ChannelHandlerContext;
@@ -64,6 +66,7 @@ public class LoginActivity extends BaseActivity{
     private FileInputStream inStream;
     private String AbsolutePath;
     private RequestService requestService = new RequestServiceImpl();
+    private static String currentWifi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,8 @@ public class LoginActivity extends BaseActivity{
         }
         WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        editor.putString("current-wifiName",wifiInfo.getSSID().replace("\"", ""));
+        currentWifi = wifiInfo.getSSID().replace("\"", "");
+        editor.putString("current-wifiName",currentWifi);
         editor.commit();
         webView.loadUrl(url);
         webSettings = webView.getSettings();
@@ -97,7 +101,41 @@ public class LoginActivity extends BaseActivity{
             readDir.mkdirs();
         }
 
+        //测试wifi是否切换 每五秒测试一次
+        Timer executeSchedule = new Timer();
+        executeSchedule.schedule(new TimerTask() {
+            @Override
+            public void run() {
 
+                WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+                WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+                if(!wifiInfo.getSSID().replace("\"", "").equals(currentWifi)){
+                    Log.i("check","wifi"+wifiInfo.getSSID().replace("\"", ""));
+                    Log.i("check","wifi被切换了");
+
+                    clearCurrent();
+                    LoginActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(LoginActivity.this,"检测到wifi切换，请断开连接并重新建立连接后登录",Toast.LENGTH_LONG).show();
+                            webView.reload();
+                        }
+                    });
+                }
+                currentWifi = wifiInfo.getSSID().replace("\"", "");
+                Log.i("check","checked");
+            }
+        }, 0, 5000);
+
+
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+
+        //do something
+        Log.i("check","destroy了");
     }
 
     @Override

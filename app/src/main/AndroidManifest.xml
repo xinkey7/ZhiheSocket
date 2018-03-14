@@ -44,6 +44,7 @@
         <activity android:name=".activity.NetNameActivity" />
         <activity android:name=".activity.SocketManageActivity" />
         <activity android:name=".activity.AddActivity" />
+        <activity android:name=".activity.Add2Activity" />
         <activity android:name=".activity.ModifyActivity" />
         <activity android:name=".activity.SocketInfoActivity" />
         <activity android:name=".activity.SocketDetailActivity" />
