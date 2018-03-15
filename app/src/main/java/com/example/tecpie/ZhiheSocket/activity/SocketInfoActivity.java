@@ -102,6 +102,7 @@ public class SocketInfoActivity extends BaseActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case REQUEST_QRCODE:
+                Toast.makeText(SocketInfoActivity.this,"更新中请稍候",Toast.LENGTH_SHORT).show();
                 if (resultCode == Activity.RESULT_OK) {
 
                     webView.reload();
@@ -109,6 +110,7 @@ public class SocketInfoActivity extends BaseActivity{
                 }
                 break;
             case REQUEST_MODIFYCODE:
+                Toast.makeText(SocketInfoActivity.this,"更新中请稍候",Toast.LENGTH_SHORT).show();
                 if (resultCode == Activity.RESULT_OK) {
                     SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
                     //网关下发
@@ -145,7 +147,7 @@ public class SocketInfoActivity extends BaseActivity{
                         if(s.getType().equals("16")){
                             sb.setDeviceid(1002);
                         }
-                        sb.setDisplay(s.getId());
+                        sb.setDisplayid(s.getId());
 
 
                         datas.add(sb);
@@ -326,8 +328,8 @@ public class SocketInfoActivity extends BaseActivity{
             Log.i("debugs","data"+data.toString());
             for(SocketBean sb : data){
                 SocketEntity socketEntity = new SocketEntity();
-                //socketEntity.setId(sb.getDisplay());
-                socketEntity.setId(1);
+                socketEntity.setId(sb.getDisplayid());
+                //socketEntity.setId(1);
                 socketEntity.setMac(preferences.getString("current-mac",""));
                 socketEntity.setName(sb.getName());
                 String ieee = sb.getIeee();
@@ -335,11 +337,14 @@ public class SocketInfoActivity extends BaseActivity{
                 socketEntity.setSerialNumber(transfer(ieee.substring(2,ieee.length())));
                 socketEntity.setState(sb.getOnline());
                 String type ="";
-                /*if(sb.getDeviceid()==1001){
-                    type = "10";
-                }else if(sb.getDeviceid()==1002){
-                    type ="16";
-                }*/
+                if(sb.getDeviceid()!=null){
+                    if(sb.getDeviceid()==1001){
+                        type = "10";
+                    }else if(sb.getDeviceid()==1002){
+                        type ="16";
+                    }
+                }
+
                 socketEntity.setType(type);
                 sockets.add(socketEntity);
             }
@@ -408,8 +413,8 @@ public class SocketInfoActivity extends BaseActivity{
             Log.i("debugs","data"+data.toString());
             for(SocketBean sb : data){
                 SocketEntity socketEntity = new SocketEntity();
-                //socketEntity.setId(sb.getDisplay());
-                socketEntity.setId(1);
+                socketEntity.setId(sb.getDisplayid());
+                //socketEntity.setId(1);
                 socketEntity.setMac(preferences.getString("current-mac",""));
                 socketEntity.setName(sb.getName());
                 String ieee = sb.getIeee();
@@ -417,11 +422,14 @@ public class SocketInfoActivity extends BaseActivity{
                 socketEntity.setSerialNumber(transfer(ieee.substring(2,ieee.length())));
                 socketEntity.setState(sb.getOnline());
                 String type ="";
-                /*if(sb.getDeviceid()==1001){
-                    type = "10";
-                }else if(sb.getDeviceid()==1002){
-                    type ="16";
-                }*/
+                if(sb.getDeviceid()!=null){
+                    if(sb.getDeviceid()==1001){
+                        type = "10";
+                    }else if(sb.getDeviceid()==1002){
+                        type ="16";
+                    }
+                }
+
                 socketEntity.setType(type);
                 socketEntitiesUpload.add(socketEntity);
             }
@@ -528,16 +536,18 @@ public class SocketInfoActivity extends BaseActivity{
             request.setCode("0004");
             List<SocketBean> data = new ArrayList<SocketBean>();
             for(SocketEntity s:sockets){
+                Log.i("handon",s.toString());
                 SocketBean sb = new SocketBean();
                 sb.setName(s.getName());
                 sb.setIeee("0x"+transfer(s.getSerialNumber()));
+                sb.setDeviceid(1001);
                 if(s.getType().equals("10")){
                     sb.setDeviceid(1001);
                 }
                 if(s.getType().equals("16")){
                     sb.setDeviceid(1002);
                 }
-                sb.setDisplay(s.getId());
+                sb.setDisplayid(s.getId());
 
 
                 data.add(sb);
@@ -564,7 +574,7 @@ public class SocketInfoActivity extends BaseActivity{
 
 
                 //写入collection-netEntites
-                NetEntity netEntity = new NetEntity();
+                /*NetEntity netEntity = new NetEntity();
                 netEntity.setSockets(sockets);
                 netEntity.setName(preferences.getString("current-netName", ""));
                 netEntity.setWifi(preferences.getString("current-wifiName", ""));
@@ -577,10 +587,18 @@ public class SocketInfoActivity extends BaseActivity{
                     editor.putString("collection-netEntities",newNetsJsonArray);
                 }else{
                     List<NetEntity> netEntities = ParseGson.parseNetEntityJasonArray(netsJsonArray);
-                    netEntities.add(netEntity);
+                    boolean added = false;
+                    for(NetEntity n: netEntities){
+                        if(n.getMac().equals(n.getMac())){
+                            added = true;
+                        }
+                    }
+                    if(!added){
+                        netEntities.add(netEntity);
+                    }
                     String newNetsJsonArray = gson.toJson(netEntities);
                     editor.putString("collection-netEntities",newNetsJsonArray);
-                }
+                }*/
                 editor.commit();
             } catch (Exception e) {
                 e.printStackTrace();

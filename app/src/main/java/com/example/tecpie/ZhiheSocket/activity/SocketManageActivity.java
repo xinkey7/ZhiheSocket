@@ -203,7 +203,7 @@ public class SocketManageActivity extends BaseActivity{
                 if(s.getType().equals("16")){
                     sb.setDeviceid(1002);
                 }
-                sb.setDisplay(s.getId());
+                sb.setDisplayid(s.getId());
 
 
                 data.add(sb);
@@ -452,7 +452,7 @@ public class SocketManageActivity extends BaseActivity{
             Log.i("debugs","data"+data.toString());
             for(SocketBean sb : data){
                 SocketEntity socketEntity = new SocketEntity();
-                socketEntity.setId(sb.getDisplay());
+                socketEntity.setId(sb.getDisplayid());
                 socketEntity.setMac(preferences.getString("current-mac",""));
                 socketEntity.setName(sb.getName());
                 String ieee = sb.getIeee();

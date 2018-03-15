@@ -5,7 +5,7 @@ public class SocketBean {
 	private String ieee;
 	private String name;
 	private Integer deviceid;
-	private Integer display;
+	private Integer displayid;
 	private Integer online;
 
 
@@ -33,13 +33,7 @@ public class SocketBean {
 		this.deviceid = deviceid;
 	}
 
-	public Integer getDisplay() {
-		return display;
-	}
 
-	public void setDisplay(Integer display) {
-		this.display = display;
-	}
 
 	public Integer getOnline() {
 		return online;
@@ -49,13 +43,21 @@ public class SocketBean {
 		this.online = online;
 	}
 
+	public Integer getDisplayid() {
+		return displayid;
+	}
+
+	public void setDisplayid(Integer displayid) {
+		this.displayid = displayid;
+	}
+
 	@Override
 	public String toString() {
 		return "SocketBean{" +
 				"ieee='" + ieee + '\'' +
 				", name='" + name + '\'' +
 				", deviceid=" + deviceid +
-				", display=" + display +
+				", displayid=" + displayid +
 				", online=" + online +
 				'}';
 	}
