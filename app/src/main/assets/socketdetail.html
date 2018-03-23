@@ -198,6 +198,8 @@ border-bottom-left-radius:1em;
 <script>
 
 var type="";
+type = window.socketDetail.getType();
+
 			function DropDown(el) {
 				this.dd = el;
 				this.placeholder = this.dd.children('span');
@@ -209,7 +211,7 @@ var type="";
 			DropDown.prototype = {
 				initEvents : function() {
 					var obj = this;
-
+                    obj.placeholder.text('插座种类: ' + type +'A');
 					obj.dd.on('click', function(event){
 						$(this).toggleClass('active');
 						return false;

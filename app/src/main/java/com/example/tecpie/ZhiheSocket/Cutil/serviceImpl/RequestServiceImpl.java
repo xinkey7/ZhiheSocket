@@ -35,8 +35,11 @@ public class RequestServiceImpl implements RequestService {
 	@Override
 	public void dispatchSocketRequest(ChannelHandlerContext ctx, DispatchSocketRequest request, String checkCode) {
 		String content = JsonUtil.toJson(request);
+		Log.i("dispatchSocketRequest",""+content);
 		String code = request.getCode();
+		Log.i("dispatchSocketRequest",""+code);
 		List<TalkBeanRequest> list = ResponseUtil.createMsg(code, content, checkCode);
+		Log.i("dispatchSocketRequest","list"+list.size());
 		if (list != null) {
 			for (TalkBeanRequest res : list) {
 				ResponseUtil.sendMsg(res.hex(), ctx);

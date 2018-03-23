@@ -150,6 +150,7 @@ public class SocketDetailActivity extends BaseActivity{
                     break;
                 }
             }
+
             editor.putString("collection-netEntities",gson.toJson(netEntities));
             editor.commit();
             //Toast.makeText(AddActivity.this,"离开confirm",Toast.LENGTH_SHORT).show();
@@ -181,7 +182,13 @@ public class SocketDetailActivity extends BaseActivity{
             }
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
+            if(socketDataResponse.getIeee()==null){
+                return getIntent().getStringExtra("socketSN");
+            }
             if(socketDataResponse.getIeee().length()%2==1 || socketDataResponse.getIeee().length()<=2 ){
                 return socketDataResponse.getIeee();
             }
@@ -190,13 +197,23 @@ public class SocketDetailActivity extends BaseActivity{
         @JavascriptInterface
         public String getName(){
 
-            String responseJson = getIntent().getStringExtra("socketName");
+            String responseJson = getIntent().getStringExtra("socketData");
             return getIntent().getStringExtra("socketName");
+        }
+
+        @JavascriptInterface
+        public String getType(){
+
+            String responseJson = getIntent().getStringExtra("socketData");
+            return getIntent().getStringExtra("socketType");
         }
         @JavascriptInterface
         public String getState(){
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
             return ""+socketDataResponse.getOnline();
         }
@@ -204,6 +221,9 @@ public class SocketDetailActivity extends BaseActivity{
         public String getPower(){
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
             return ""+socketDataResponse.getPower();
         }
@@ -211,6 +231,9 @@ public class SocketDetailActivity extends BaseActivity{
         public String getConsum(){
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
             return ""+socketDataResponse.getConsum();
         }
@@ -218,6 +241,9 @@ public class SocketDetailActivity extends BaseActivity{
         public String getVol(){
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
             return ""+socketDataResponse.getVol();
         }
@@ -225,6 +251,9 @@ public class SocketDetailActivity extends BaseActivity{
         public String getCur(){
             Gson gson = new Gson();
             String responseJson = getIntent().getStringExtra("socketData");
+            if(responseJson==null){
+                return "";
+            }
             SocketDataResponse socketDataResponse = gson.fromJson(responseJson,SocketDataResponse.class);
             return ""+socketDataResponse.getCur();
         }

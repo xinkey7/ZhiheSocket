@@ -52,9 +52,12 @@ public class AppClientHandle extends ChannelInboundHandlerAdapter{
 				String order = bean.getMsgType();
 				String total_str = bean.getTotal();
 				String current_str = bean.getCurrent();
+
+
 				int total = Integer.parseInt(HexTools.hexStr2long(total_str) + "");
 				int current = Integer.parseInt(HexTools.hexStr2long(current_str) + "");
 				map.put(current, bean.getContent());
+
 				if (map.size() == total) {// 消息接收完毕，开始处理程序
 					// 假设total>1，先把所有消息包的内容拼起来，组成一个完成的数据
 					String real_content = "";
@@ -63,6 +66,7 @@ public class AppClientHandle extends ChannelInboundHandlerAdapter{
 						Log.i("debugs","Json:" + HexTools.hexToString(real_content));
 
 					}
+					map =  new HashMap<Integer, String>();
 					real_content = HexTools.hexToString(real_content);
 					if (order.equals("8001")) {//登录回复
 						LoginResponse response = service.loginResponse(real_content);
@@ -75,17 +79,19 @@ public class AppClientHandle extends ChannelInboundHandlerAdapter{
 						ChannelBean.setBaseResponse(response);
 					} else if (order.equals("8004")){//下发网关应答
 						BaseResponse response = service.baseResponse(real_content);
+						Log.i("debugs","responsegetResult"+response.getResult());
 						ChannelBean.setBaseResponse(response);
 					} else if (order.equals("8005")){//读取网关插座信息应答
 						ReadSocketResponse response = service.readSocketResponse(real_content);
 						ChannelBean.setReadSocketResponse(response);
+						Log.i("debugs","放入了setReadSocketResponse");
 					} else if (order.equals("8006")){//写入网关配置应答
 						BaseResponse response = service.baseResponse(real_content);
 						ChannelBean.setBaseResponse(response);
 					}  else if (order.equals("8007")){//获取插座信息应答
 
 						SocketDataResponse response = service.socketDataResponse(real_content);
-						Log.i("debugs","ieee"+response.getIeee());
+
 						ChannelBean.setSocketDataResponse(response);
 					}
 				}

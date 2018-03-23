@@ -86,4 +86,19 @@ public class SocketDataResponse {
     public void setIeee(String ieee) {
         this.ieee = ieee;
     }
+
+    @Override
+    public String toString() {
+        return "SocketDataResponse{" +
+                "code='" + code + '\'' +
+                ", online=" + online +
+                ", vol=" + vol +
+                ", cur=" + cur +
+                ", power=" + power +
+                ", consum=" + consum +
+                ", onoff=" + onoff +
+                ", result=" + result +
+                ", ieee='" + ieee + '\'' +
+                '}';
+    }
 }

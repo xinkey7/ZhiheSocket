@@ -25,42 +25,50 @@ public class ResponseUtil {
 	
 	public static List<TalkBeanRequest> createMsg(String code, String content, String checkCode) {
 		List<TalkBeanRequest> list = new ArrayList<TalkBeanRequest>();
-		int sum = content.length() / 2 / 1024;
-		int left = content.length() / 2 % 1024;
-		int total_int = 0;
-		if (left == 0) {
-			total_int = sum;
-		} else {
-			total_int = sum + 1;
-		}
-		for (int i = 1; i <= total_int; i++) {
-			TalkBeanRequest response = new TalkBeanRequest();
-			response.setSync("5a5a");
-			response.setMsgType(code);
-			String current = HexTools.long2hexStr(i);
-			response.setCurrent(HexTools.obox(current, 4));
-			String total = HexTools.long2hexStr(total_int);
-			response.setTotal(HexTools.obox(total, 4));
-			int start = 0;
-			int end = 0;
-			if (i == total_int) {
-				start = 2048 * (i - 1) * 2;
-				end = content.length();
+		try {
+			int sum = content.length() / 2 / 1024;
+			int left = content.length() / 2 % 1024;
+			int total_int = 0;
+			if (left == 0) {
+				total_int = sum;
 			} else {
-				start = 2048 * (i - 1) * 2;
-				end = 2048 * i * 2;
+				total_int = sum + 1;
 			}
-			response.setContent(HexTools.Str2hexStr(content.substring(start,
-					end)));
-			int length_int = HexTools.Str2hexStr(content.substring(start, end))
-					.length() / 2 + 10 + 16;
-			String length_str = HexTools.long2hexStr(length_int);
-			response.setLength(HexTools.obox(length_str, 4));
-			String head_content = response.headContent();
-			String md5 = Md5Util.HexStrMD5(head_content + HexTools.Str2hexStr(checkCode));
-			response.setTail(md5);
-			list.add(response);
+			for (int i = 1; i <= total_int; i++) {
+				TalkBeanRequest response = new TalkBeanRequest();
+				response.setSync("5a5a");
+				response.setMsgType(code);
+				String current = HexTools.long2hexStr(i);
+				response.setCurrent(HexTools.obox(current, 4));
+				String total = HexTools.long2hexStr(total_int);
+				response.setTotal(HexTools.obox(total, 4));
+				int start = 0;
+				int end = 0;
+
+				if (i == total_int) {
+					start = 1024 * (i - 1) * 2;
+					end = content.length();
+				} else {
+					start = 1024 * (i - 1) * 2;
+					end = 1024 * i * 2;
+				}
+				response.setContent(HexTools.Str2hexStr(content.substring(start,
+						end)));
+				int length_int = HexTools.Str2hexStr(content.substring(start, end))
+						.length() / 2 + 10 + 16;
+				String length_str = HexTools.long2hexStr(length_int);
+				response.setLength(HexTools.obox(length_str, 4));
+				String head_content = response.headContent();
+				String md5 = Md5Util.HexStrMD5(head_content + HexTools.Str2hexStr(checkCode));
+				response.setTail(md5);
+				list.add(response);
+			}
+			return list;
+		}catch (Exception e){
+			e.printStackTrace();
+
 		}
+
 		return list;
 	}
 

@@ -168,13 +168,14 @@ var list=eval("("+str+")");
 			var sn ="*"+list[i].serialNumber.slice(-6);
 			var index=list[i].id;
 			var tr;
+			var macs = "*"+list[i].mac.slice(-6);
 			if(list[i].state==0){
 			tr = '<tr onclick="detail('+index+')" style="height:40px;border-top:1px solid #DDDDDD;border-bottom:1px solid #DDDDDD;font-size:14px;">'+
                     '<td ><span  style="margin-left:0px;">'+list[i].id+'</span></td>'+
                     '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
                     '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
 
-                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span style="margin-left:0px;">'+macs+'</span></td>'+
                     '<td  ><span  style="margin-left:0px;">未入网</span></td>'+
                 '</tr>';
 			}
@@ -184,7 +185,7 @@ var list=eval("("+str+")");
                     '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
                     '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
 
-                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span style="margin-left:0px;">'+macs+'</span></td>'+
                     '<td  ><span class="indicator on"></td>'+
                 '</tr>';
 			}
@@ -194,7 +195,7 @@ var list=eval("("+str+")");
                     '<td ><span  style="margin-left:0px;">'+list[i].name+'</span></td>'+
                     '<td ><span  style="margin-left:0px;">'+sn+'</span></td>'+
 
-                    '<td  ><span style="margin-left:0px;">'+list[i].mac+'</span></td>'+
+                    '<td  ><span style="margin-left:0px;">'+macs+'</span></td>'+
                     '<td  ><span class="indicator off"></td>'+
                 '</tr>';
 			}

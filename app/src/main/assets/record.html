@@ -106,7 +106,7 @@ border-bottom-left-radius:1em;
     <div id="foo" hidden></div>
 
     <ul id="hlist" class="record-list" >
-        <div style="height:100px;border-bottom:1px solid #D6D6D6">
+        <div style="height:100px;">
 
             <form class="loginform">
                 <!--<div class="logo"><img  src="img/se_university.png"  alt="国家电网公司"></div>-->
@@ -117,11 +117,12 @@ border-bottom-left-radius:1em;
                     </div>
                 </div>
 
-                <button  style ="margin-left:100px;width:130px;" type="button" id="add">添加插座</button>
+                <button  style ="margin-left:100px;width:130px;display:none" type="button" id="add">添加插座</button>
+                <button  style ="margin-left:100px;width:130px;margin-top:40px;" type="button" id="confirm">确认</button>
             </form>
 
         </div>
-        <div class="section-bd">
+        <div hidden class="section-bd">
             <table class="device-table" style="margin-left:6px;margin-top:10px;width:96%;background:#fff">
                 <thead>
                 <tr  style="height:40px;border-top:1px solid #DDDDDD;
@@ -207,8 +208,8 @@ border-bottom-left-radius:1em;
     <div>
         <button hidden class="tbutton" style ="width:100px;margin-left:14px" type="button" id="open">开网</button>
         <button hidden class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="close">关网</button>
-        <button  class="tbutton"  style ="width:100px;margin-left:83px" type="button" id="confirm">确认</button>
-        <button class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="save">备份</button>
+        <!--<button  class="tbutton"  style ="width:100px;margin-left:123px" type="button" id="confirm">确认</button>-->
+        <button hidden class="tbutton"  style ="width:100px;margin-left:10px" type="button" id="save">备份</button>
     </div>
 
 </section>

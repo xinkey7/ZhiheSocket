@@ -141,6 +141,7 @@ public class SocketInfoActivity extends BaseActivity{
                         SocketBean sb = new SocketBean();
                         sb.setName(s.getName());
                         sb.setIeee("0x"+transfer(s.getSerialNumber()));
+                        sb.setDeviceid(1001);
                         if(s.getType().equals("10")){
                             sb.setDeviceid(1001);
                         }
@@ -254,6 +255,7 @@ public class SocketInfoActivity extends BaseActivity{
             int state = 0;
             String type="";
             String ieee = "";
+            String SN = "";
             for(SocketEntity s : sockets){
                 if(s.getId()==Integer.valueOf(id).intValue()){
                     ieee = "0x"+transfer(s.getSerialNumber());
@@ -261,6 +263,7 @@ public class SocketInfoActivity extends BaseActivity{
                     socketname = s.getName();
                     state = s.getState();
                     type = s.getType();
+                    SN = s.getSerialNumber();
 
                 }
 
@@ -275,6 +278,7 @@ public class SocketInfoActivity extends BaseActivity{
                 }
 
                  socketDataResponse = ChannelBean.getSocketDataResponse();
+                Log.i("debugs","socketDataResponse"+socketDataResponse);
             }else{
                 socketDataResponse.setIeee(ieee);
                 socketDataResponse.setOnline(0);
@@ -283,13 +287,14 @@ public class SocketInfoActivity extends BaseActivity{
 
             //Log.i("debugs","ieee"+socketDataResponse.getIeee());
             String socketDataResponseJsonArray = gson.toJson(socketDataResponse);
-            Log.i("debugs",socketDataResponseJsonArray);
-            Log.i("debugs",""+socketname+"/"+type+"/"+id);
+           // Log.i("debugs",socketDataResponseJsonArray);
+            //Log.i("debugs",""+socketname+"/"+type+"/"+id);
             Intent intent = new Intent(SocketInfoActivity.this,SocketDetailActivity.class);
             intent.putExtra("socketData",socketDataResponseJsonArray);
             intent.putExtra("socketName",socketname);
             intent.putExtra("socketType",type);
             intent.putExtra("socketId",id);
+            intent.putExtra("socketSN",SN);
 
 
             startActivityForResult(intent,REQUEST_MODIFYCODE);
@@ -325,7 +330,7 @@ public class SocketInfoActivity extends BaseActivity{
             }
             ReadSocketResponse readSocketResponse = ChannelBean.getReadSocketResponse();
             List<SocketBean> data = readSocketResponse.getData();
-            Log.i("debugs","data"+data.toString());
+
             for(SocketBean sb : data){
                 SocketEntity socketEntity = new SocketEntity();
                 socketEntity.setId(sb.getDisplayid());
@@ -335,7 +340,11 @@ public class SocketInfoActivity extends BaseActivity{
                 String ieee = sb.getIeee();
 
                 socketEntity.setSerialNumber(transfer(ieee.substring(2,ieee.length())));
-                socketEntity.setState(sb.getOnline());
+                if(sb.getOnline()==1){
+                    socketEntity.setState(1);
+                }else{
+                    socketEntity.setState(2);
+                }
                 String type ="";
                 if(sb.getDeviceid()!=null){
                     if(sb.getDeviceid()==1001){
@@ -360,6 +369,7 @@ public class SocketInfoActivity extends BaseActivity{
 
 
             if(readSocketResponse.getResult()==1){
+                Log.i("debugs","data"+data.toString());
                 Toast.makeText(SocketInfoActivity.this,"读取成功",Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(SocketInfoActivity.this,"读取失败",Toast.LENGTH_SHORT).show();
@@ -380,9 +390,9 @@ public class SocketInfoActivity extends BaseActivity{
         }
         @JavascriptInterface
         public String getTitleSockets(){
-            Intent intent = getIntent();
-            String title = intent.getStringExtra("title");
-            int index= Integer.valueOf(title).intValue();
+            //Intent intent = getIntent();
+            //String title = intent.getStringExtra("title");
+            //int index= Integer.valueOf(title).intValue();
             Gson gson = new Gson();
             SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor=preferences.edit();
@@ -393,7 +403,7 @@ public class SocketInfoActivity extends BaseActivity{
             List<SocketEntity> socketEntitiesCache = new ArrayList<SocketEntity>();
             for(NetEntity n :netEntities){
                 if(n.getMac().equals(preferences.getString("current-mac",""))){
-                    socketEntitiesCache = netEntities.get(index).getSockets();
+                    socketEntitiesCache = n.getSockets();
                 }
             }
 
@@ -404,13 +414,13 @@ public class SocketInfoActivity extends BaseActivity{
             Log.i("debugs","ctx"+ctx.toString());
             requestService.baseRequest(ctx, "0005", "gateway");
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             ReadSocketResponse readSocketResponse = ChannelBean.getReadSocketResponse();
             List<SocketBean> data = readSocketResponse.getData();
-            Log.i("debugs","data"+data.toString());
+
             for(SocketBean sb : data){
                 SocketEntity socketEntity = new SocketEntity();
                 socketEntity.setId(sb.getDisplayid());
@@ -420,8 +430,14 @@ public class SocketInfoActivity extends BaseActivity{
                 String ieee = sb.getIeee();
 
                 socketEntity.setSerialNumber(transfer(ieee.substring(2,ieee.length())));
-                socketEntity.setState(sb.getOnline());
+                if(sb.getOnline()==1){
+                    socketEntity.setState(1);
+                }else{
+                    socketEntity.setState(2);
+                }
+
                 String type ="";
+
                 if(sb.getDeviceid()!=null){
                     if(sb.getDeviceid()==1001){
                         type = "10";
@@ -431,6 +447,7 @@ public class SocketInfoActivity extends BaseActivity{
                 }
 
                 socketEntity.setType(type);
+
                 socketEntitiesUpload.add(socketEntity);
             }
             String macAddress = preferences.getString("current-mac","");
@@ -452,7 +469,9 @@ public class SocketInfoActivity extends BaseActivity{
 
             for(int i=0;i<netEntities.size();i++){
                 if(netEntities.get(i).getMac().equals(macAddress)){
-                    netEntities.get(i).setSockets(socketEntitiesCache);
+                    // 合并
+                   // netEntities.get(i).setSockets(socketEntitiesCache);
+                    netEntities.get(i).setSockets(socketEntitiesUpload);
                     break;
                 }
             }
@@ -507,6 +526,7 @@ public class SocketInfoActivity extends BaseActivity{
 
         @JavascriptInterface
         public void handon(){
+            Toast.makeText(SocketInfoActivity.this,"下发中...",Toast.LENGTH_SHORT).show();
             Gson gson = new Gson();
             SharedPreferences preferences=getSharedPreferences("zigBee", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor=preferences.edit();
@@ -555,13 +575,14 @@ public class SocketInfoActivity extends BaseActivity{
             request.setData(data);
             Log.i("xiafa",request.toString());
             requestService.dispatchSocketRequest(ctx, request, "gateway");
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             BaseResponse response = ChannelBean.getBaseResponse();
-            Log.i("xiafa",response.toString());
+            Log.i("xiafa","response.getCode():"+response.getCode());
             if(response.getResult()==1){
                 Toast.makeText(SocketInfoActivity.this,"下发成功",Toast.LENGTH_SHORT).show();
             }else{
